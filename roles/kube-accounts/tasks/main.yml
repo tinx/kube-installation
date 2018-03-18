@@ -25,4 +25,3 @@
     kube_account_sudo: true
     kube_account_ssh_keys: '{{ [ item.ssh_key ] }}'
   with_items: '{{ kube_accounts_userlist }}'
-
