@@ -3,6 +3,8 @@
   hosts: kube_install_hosts
   remote_user: pi
   become: true
+  tags:
+    - account_setup
   tasks:
     - name: Is the host reachable and I can log in?
       ping:
@@ -13,11 +15,73 @@
         kube_account_name: pi
         kube_account_sudo: true
         kube_account_ssh_keys: '{{ kube_users|map(attribute="ssh_key")|list }}'
-    - name: Lock 'pi' account password on Raspberry (login still possible)
-      command: passwd -l pi
-      changed_when: false
+#    - name: Lock 'pi' account password on Raspberry (login still possible)
+#      command: passwd -l pi
+#      changed_when: false
     - include_role:
         name: kube-accounts
       vars:
         kube_accounts_userlist: '{{ kube_users }}'
 
+- name: Configure network
+  hosts: kube_install_hosts
+  remote_user: ansible
+  become: true
+  tags:
+    - network_setup
+  tasks:
+    - name: Disable WLAN and Bluetooth
+      copy:
+        src: raspi-blacklist.conf
+        dest: /etc/modprobe.d/raspi-blacklist.conf
+        owner: root
+        group: root
+        mode: 0644
+    - name: Disable IPv6
+      copy:
+        src: sysctl-disable-ipv6.conf
+        dest: /etc/sysctl.d/80-disable-ipv6.conf
+        owner: root
+        group: root
+        mode: 0644
+    - name: Configure static interfaces - add include for eth0
+      lineinfile:
+        path: /etc/network/interfaces
+        line: '{{ item }}'
+        state: present
+      with_items:
+        - 'source /etc/network/interfaces.d/eth0'
+        - 'source /etc/network/interfaces.d/eth0.200'
+    - name: Configure static interfaces - remove directory-include
+      lineinfile:
+        path: /etc/network/interfaces
+        line: '# source-directory /etc/network/interfaces.d'
+        regexp: '^(# |#)?source-directory /etc/network/interfaces.d'
+        state: present
+    - name: Copy static interface config
+      copy:
+        src: 'rubix-{{ item }}'
+        dest: '/etc/network/interfaces.d/{{ item }}'
+        owner: root
+        group: root
+        mode: 0644
+      with_items:
+        - eth0
+        - eth0.200
+    - name: Disable and stop DHCP client
+      service:
+        name: dhcpcd
+        enabled: false
+        state: stopped
+
+- name: Configure dnsmasq
+  hosts: kube_install_hosts
+  remote_user: ansible
+  become: true
+  tags:
+    - dnsmasq_setup
+  tasks:
+    - name: Configure boot server
+      include_role:
+        name: kube-boot-server
+      vars: []
