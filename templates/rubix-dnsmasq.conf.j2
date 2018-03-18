@@ -1,0 +1,48 @@
+#
+# General Settings
+#
+
+# debug mode
+#no-daemon
+
+# only listen on this interface
+listen-address=192.168.200.1
+bind-interfaces
+
+#
+# DHCP settings
+#
+
+# note: the IP range is actually ignored because of the "static" option
+dhcp-range=192.168.200.10,static,255.255.255.0
+dhcp-hostsfile=/opt/dnsmasq/etc/dhcp-hosts
+dhcp-option=option:domain-name,kube.packetloss.de
+dhcp-option=option:bootfile-name,BOOTX64.EFI
+dhcp-leasefile=/opt/dnsmasq/var/dhcp_leases
+
+#
+# TFTP settings
+#
+
+enable-tftp
+tftp-root=/opt/dnsmasq/tftp/
+tftp-unique-root
+tftp-secure
+tftp-lowercase
+
+#
+# DNS settings
+#
+
+domain=kube.packetloss.de
+
+# query all upstream DNS servers simultanously
+all-servers
+
+# provide an MX record. Default is to annouce this host on which dnsmasq runs
+mx-host=rubix.kube.packetloss.de
+
+# define which local host names to resolve
+no-hosts
+hostsdir=/opt/dnsmasq/local_hosts/
+resolv-file=/opt/dnsmasq/etc/resolv.conf

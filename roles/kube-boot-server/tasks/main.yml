@@ -4,10 +4,69 @@
     name: dnsmasq
     state: present
 
+- name: Create config directory
+  file:
+    name: '{{ item }}'
+    owner: root
+    group: root
+    state: directory
+  with_items:
+    - /opt/dnsmasq
+    - /opt/dnsmasq/etc
+    - /opt/dnsmasq/tftp
+    - /opt/dnsmasq/conf.d
+    - /opt/dnsmasq/local_hosts
+- name: Create the OTHER config directory
+  file:
+    name: '{{ item }}'
+    owner: dnsmasq
+    group: root
+    state: directory
+  with_items:
+    - /opt/dnsmasq/var
+- name: Adjust dnsmasq defaults
+  template:
+    src: rubix-dnsmasq.j2
+    dest: /etc/default/dnsmasq
+    owner: root
+    group: root
+    mode: 0644
+- name: Write dnsmasq.conf
+  template:
+    src: rubix-dnsmasq.conf.j2
+    dest: /opt/dnsmasq/etc/dnsmasq.conf
+    owner: root
+    group: root
+    mode: 0644
+- name: Write hosts file
+  template:
+    src: rubix-dnsmasq-hosts.j2
+    dest: /opt/dnsmasq/local_hosts/kube
+    owner: root
+    group: root
+    mode: 0644
+- name: Write dhcp_hosts file
+  template:
+    src: rubix-dnsmasq-dhcp-hosts.j2
+    dest: /opt/dnsmasq/etc/dhcp-hosts
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Write resolv.conf file
+  template:
+    src: rubix-dnsmasq-resolv.conf.j2
+    dest: /opt/dnsmasq/etc/resolv.conf
+    owner: root
+    group: root
+    mode: 0644
 
 
-- name: enable and start dnsmasq
-  service:
-    name: dnsmasq
-    enable: true
-    state: started
+
+
+
+#- name: enable and start dnsmasq
+#  service:
+#    name: dnsmasq
+#    enable: true
+#    state: started
