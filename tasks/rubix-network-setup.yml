@@ -38,3 +38,10 @@
     name: dhcpcd
     enabled: false
     state: stopped
+- name: Add local nameserver
+  lineinfile:
+    path: /etc/resolv.conf
+    regexp: '.*nameserver.*'
+    line: 'nameserver 192.168.0.8'
+    state: present
+

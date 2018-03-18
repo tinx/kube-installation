@@ -1,0 +1,25 @@
+et default="1"
+
+function load_video {
+  insmod efi_gop
+  insmod efi_uga
+  insmod video_bochs
+  insmod video_cirrus
+  insmod all_video
+}
+
+load_video
+set gfxpayload=keep
+insmod gzio
+insmod part_gpt
+insmod ext2
+
+set timeout=6
+
+search --no-floppy --set=root -l 'CentOS 7 x86_64'
+
+menuentry 'PXE Install CentOS 7' --class fedora --class gnu-linux --class gnu --class os {
+        linuxefi /pxeboot/vmlinuz inst.repo=http://192.168.200.1/centos/ ksdevice=bootif load_ramdisk=1 network ks=http://192.168.200.1/kickstart/generic.ks
+        initrdefi /pxeboot/initrd.img
+}
+
