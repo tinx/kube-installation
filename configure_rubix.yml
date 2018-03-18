@@ -1,0 +1,10 @@
+---
+- name: Set up rubix configuration
+  hosts: kube_install_hosts
+  remote_user: pi
+  become: true
+  tasks:
+    - include_role:
+        name: kube-accounts
+
+

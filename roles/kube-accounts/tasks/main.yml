@@ -1,0 +1,28 @@
+---
+- name: Disable ssh root login using password authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: 'PermitRootLogin prohibit-password'
+    regexp: '^#?PermitRootLogin'
+    state: present
+  notify: restart sshd
+
+- name: Create ansible group
+  group:
+    name: ansible
+    state: present
+- name: Create ansible account
+  user:
+    name: ansible
+    group: ansible
+    createhome: true
+    comment: Ansible Automation
+    state: present
+
+- name: Allow account to use sudo without password
+  lineinfile:
+    path: /etc/sudoers.d/010_ansible-nopasswd
+    line: 'ansible ALL=(ALL) NOPASSWD: ALL'
+    create: yes
+    state: present
+

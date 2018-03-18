@@ -1,0 +1,8 @@
+[kube_install_hosts]
+rubix		ansible_host=192.168.0.105
+
+[kube_nodes]
+kube1
+kube2
+kube3
+
