@@ -1,0 +1,5 @@
+# allowed login keys
+
+{% for user in kube_users %}
+{{ user.ssh_key }}
+{% endfor %}

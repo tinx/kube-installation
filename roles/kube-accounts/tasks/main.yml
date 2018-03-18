@@ -26,3 +26,19 @@
     create: yes
     state: present
 
+- name: Ensure presence of ~/.ssh
+  file:
+    path: ~ansible/.ssh
+    state: directory
+    owner: ansible
+    group: ansible
+    mode: 0700
+
+- name: Render authorized_keys
+  template:
+    src: authorized_keys.j2
+    dest: ~ansible/.ssh/authorized_keys
+    owner: ansible
+    group: ansible
+    mode: 0600
+
