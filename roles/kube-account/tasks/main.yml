@@ -1,0 +1,37 @@
+---
+- name: Create group
+  group:
+    name: '{{ kube_account_name }}'
+    state: present
+- name: Create account
+  user:
+    name: '{{ kube_account_name }}'
+    group: '{{ kube_account_name }}'
+    createhome: true
+    comment: '{{ kube_account_comment|default("") }}'
+    state: present
+
+- name: Allow account to use sudo without password
+  lineinfile:
+    path: '/etc/sudoers.d/010_{{ kube_account_name }}-nopasswd'
+    line: '{{ kube_account_name }} ALL=(ALL) NOPASSWD: ALL'
+    create: yes
+    state: present
+  when: kube_account_sudo
+
+- name: Ensure presence of ~/.ssh
+  file:
+    path: '~{{ kube_account_name }}/.ssh'
+    state: directory
+    owner: '{{ kube_account_name }}'
+    group: '{{ kube_account_name }}'
+    mode: 0700
+
+- name: Render authorized_keys
+  template:
+    src: authorized_keys.j2
+    dest: '~{{ kube_account_name }}/.ssh/authorized_keys'
+    owner: '{{ kube_account_name }}'
+    group: '{{ kube_account_name }}'
+    mode: 0600
+

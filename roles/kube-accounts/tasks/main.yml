@@ -7,38 +7,11 @@
     state: present
   notify: restart sshd
 
-- name: Create ansible group
-  group:
-    name: ansible
-    state: present
 - name: Create ansible account
-  user:
-    name: ansible
-    group: ansible
-    createhome: true
-    comment: Ansible Automation
-    state: present
-
-- name: Allow account to use sudo without password
-  lineinfile:
-    path: /etc/sudoers.d/010_ansible-nopasswd
-    line: 'ansible ALL=(ALL) NOPASSWD: ALL'
-    create: yes
-    state: present
-
-- name: Ensure presence of ~/.ssh
-  file:
-    path: ~ansible/.ssh
-    state: directory
-    owner: ansible
-    group: ansible
-    mode: 0700
-
-- name: Render authorized_keys
-  template:
-    src: authorized_keys.j2
-    dest: ~ansible/.ssh/authorized_keys
-    owner: ansible
-    group: ansible
-    mode: 0600
-
+  include_role:
+    name: kube-account
+  vars:
+    kube_account_name: ansible
+    kube_account_comment: Ansible Automation
+    kube_account_sudo: true
+    kube_account_ssh_keys: '{{ kube_users|map(attribute="ssh_key")|list }}'

@@ -1,5 +1,5 @@
 # allowed login keys
 
-{% for user in kube_users %}
-{{ user.ssh_key }}
+{% for key in kube_account_ssh_keys %}
+{{ key }}
 {% endfor %}
