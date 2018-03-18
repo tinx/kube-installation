@@ -6,5 +6,7 @@
   tasks:
     - include_role:
         name: kube-accounts
+      vars:
+        kube_accounts_userlist: '{{ kube_users }}'
 
 

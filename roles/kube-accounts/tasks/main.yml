@@ -14,4 +14,15 @@
     kube_account_name: ansible
     kube_account_comment: Ansible Automation
     kube_account_sudo: true
-    kube_account_ssh_keys: '{{ kube_users|map(attribute="ssh_key")|list }}'
+    kube_account_ssh_keys: '{{ kube_accounts_userlist|map(attribute="ssh_key")|list }}'
+
+- name: Create user accounts
+  include_role:
+    name: kube-account
+  vars:
+    kube_account_name: '{{ item.username }}'
+    kube_account_comment: '{{ item.comment|default("") }}'
+    kube_account_sudo: true
+    kube_account_ssh_keys: '{{ [ item.ssh_key ] }}'
+  with_items: '{{ kube_accounts_userlist }}'
+
