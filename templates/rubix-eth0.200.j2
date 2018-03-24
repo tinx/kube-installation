@@ -1,0 +1,8 @@
+auto eth0.200
+
+iface eth0.200 inet static
+        address {{ internal_ip }}
+        netmask {{ kube_networks.internal.netmask }}
+        network {{ kube_networks.internal.network }}
+        broadcast {{ kube_networks.internal.broadcast }}
+

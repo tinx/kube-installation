@@ -1,4 +1,4 @@
-domain {{ kube_domain }}.
-search {{ kube_domain }}.
+domain {{ kube_networks.internal.domain }}.
+search {{ kube_networks.internal.domain }}.
 nameserver {{ kube_nameserver }}
 

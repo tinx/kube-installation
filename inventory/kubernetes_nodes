@@ -1,8 +1,8 @@
 [kube_install_hosts]
-rubix	external_ip=192.168.0.40 internal_ip=192.168.200.40
+rubix	external_ip=192.168.0.40 internal_ip=192.168.200.40 mac=b8:27:eb:5a:49:1c dhcp_tag=deploy
 
 [kube_nodes]
-kube1	external_ip=192.168.0.41 internal_ip=192.168.200.41
-kube2	external_ip=192.168.0.42 internal_ip=192.168.200.42
-kube3	external_ip=192.168.0.43 internal_ip=192.168.200.43
+kube1	external_ip=192.168.0.41 internal_ip=192.168.200.41 mac=70:85:c2:71:78:3c dhcp_tag=node
+kube2	external_ip=192.168.0.42 internal_ip=192.168.200.42 mac=70:85:c2:71:78:5e dhcp_tag=node
+kube3	external_ip=192.168.0.43 internal_ip=192.168.200.43 mac=70:85:c2:71:78:42 dhcp_tag=node
 

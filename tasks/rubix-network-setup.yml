@@ -34,9 +34,9 @@
     line: '# source-directory /etc/network/interfaces.d'
     regexp: '^(# |#)?source-directory /etc/network/interfaces.d'
     state: present
-- name: Copy static interface config
-  copy:
-    src: 'rubix-{{ item }}'
+- name: Render static interface config
+  template:
+    src: 'rubix-{{ item }}.j2'
     dest: '/etc/network/interfaces.d/{{ item }}'
     owner: root
     group: root

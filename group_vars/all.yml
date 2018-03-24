@@ -1,6 +1,18 @@
 ---
 kube_nameserver: 192.168.0.8
-kube_domain: kube.packetloss.de
+
+kube_networks:
+  internal:
+    network: 192.168.200.0
+    dhcp_min: 192.168.200.40
+    netmask: 255.255.255.0
+    broadcast: 192.168.200.255
+    domain: kube.packetloss.de
+  external:
+    network: 192.168.0.0
+    netmask: 255.255.255.0
+    gateway: 192.168.0.8
+    broadcast: 192.168.0.255
 
 kube_users:
   - username: !vault |

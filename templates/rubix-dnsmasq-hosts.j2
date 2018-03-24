@@ -1,5 +1,5 @@
-127.0.0.1       localhost localhost. localhost.{{ kube_domain }} localhost.{{ kube_domain }}.
+127.0.0.1       localhost localhost. localhost.{{ kube_networks.internal.domain }} localhost.{{ kube_networks.internal.domain }}.
 
 {% for host in groups["all"] %}
-{{ hostvars[host].internal_ip }}	{{ host }}.{{ kube_domain }} {{ host }}
+{{ hostvars[host].internal_ip }}	{{ host }}.{{ kube_networks.internal.domain }} {{ host }}
 {% endfor %}

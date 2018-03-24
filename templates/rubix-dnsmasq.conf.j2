@@ -6,7 +6,7 @@
 #no-daemon
 
 # only listen on this interface
-listen-address=192.168.200.1
+listen-address={{ internal_ip }}
 bind-interfaces
 
 #
@@ -14,9 +14,9 @@ bind-interfaces
 #
 
 # note: the IP range is actually ignored because of the "static" option
-dhcp-range=192.168.200.10,static,255.255.255.0
+dhcp-range={{ kube_networks.internal.dhcp_min }},static,{{ kube_networks.internal.netmask }}
 dhcp-hostsfile=/opt/dnsmasq/etc/dhcp-hosts
-dhcp-option=option:domain-name,kube.packetloss.de
+dhcp-option=option:domain-name,{{ kube_networks.internal.domain }}
 dhcp-option=option:bootfile-name,BOOTX64.EFI
 dhcp-leasefile=/opt/dnsmasq/var/dhcp_leases
 
@@ -34,13 +34,13 @@ tftp-lowercase
 # DNS settings
 #
 
-domain=kube.packetloss.de
+domain={{ kube_networks.internal.domain }}
 
 # query all upstream DNS servers simultanously
 all-servers
 
 # provide an MX record. Default is to annouce this host on which dnsmasq runs
-mx-host=rubix.kube.packetloss.de
+mx-host=rubix.{{ kube_networks.internal.domain }}
 
 # define which local host names to resolve
 no-hosts

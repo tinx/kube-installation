@@ -1,0 +1,9 @@
+auto eth0
+
+iface eth0 inet static
+        address {{ external_ip }}
+        netmask {{ kube_networks.external.netmask }}
+        network {{ kube_networks.external.network }}
+        broadcast {{ kube_networks.external.broadcast }}
+        gateway {{ kube_networks.external.gateway }}
+
