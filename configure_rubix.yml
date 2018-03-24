@@ -1,4 +1,22 @@
 ---
+- name: Upgrade packages and disable swap
+  hosts: kube_install_hosts
+  remote_user: ansible
+  become: true
+  tags:
+    - upgrade_packages
+    - disable_swap
+  tasks:
+    - name: Upgrade packages
+      apt:
+        update_cache: yes
+        upgrade: full
+    - name: Disable swap
+      service:
+        name: dphys-swapfile
+        enabled: false
+        state: stopped
+
 - name: Basic account and login setup
   hosts: kube_install_hosts
   remote_user: ansible
