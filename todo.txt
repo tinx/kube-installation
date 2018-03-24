@@ -13,5 +13,6 @@ To Do:
  - fix: do not access global variables (or hostvars) inside roles
  - the CentOS release version is still hard-coded. (7.4.1708)
  - re-mount ISO handler if download received a new file
+ - preserve ssh hostkeys for nodes and rubix
 
 

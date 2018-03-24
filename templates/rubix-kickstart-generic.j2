@@ -26,7 +26,7 @@ user --groups=wheel --name=ansible --password={{ kube_crypted_ansible_password }
 bootloader --append=" crashkernel=auto" --location=mbr --boot-drive=sda
 #autopart --type=lvm --noswap --nohome
 # Partition clearing information
-clearpart --none --initlabel
+clearpart --all --drives=sda --initlabel
 part /boot --type=xfs --size=1000
 part /boot/efi --type=vfat --size=200
 part / --type=xfs --grow
@@ -54,13 +54,16 @@ reboot
 
 %post
 mkdir -m0700 /home/ansible/.ssh/
-
+chown ansible:ansible /home/ansible/.ssh
 cat <<EOF >/home/ansible/.ssh/authorized_keys
 {% for key in kube_accounts_userlist|map(attribute="ssh_key")|list %}
 {{ key }}
 {% endfor %}
 EOF
 chmod 600 /home/ansible/.ssh/authorized_keys
+chown ansible:ansible /home/ansible/.ssh/authorized_keys
+# enable password-less sudo
+echo "ansible ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/010_ansible-nopasswd
 # fix selinux context
 restorecon -R /home/ansible/.ssh
 # disable SELinux
