@@ -19,6 +19,12 @@
     state: present
   when: kube_account_sudo
 
+- name: Disallow account to use sudo
+  file:
+    state: absent
+    path: '/etc/sudoers.d/010_{{ kube_account_name }}-nopasswd'
+  when: (kube_account_sudo is not defined) or (not kube_account_sudo)
+
 - name: Ensure presence of ~/.ssh
   file:
     path: '~{{ kube_account_name }}/.ssh'
