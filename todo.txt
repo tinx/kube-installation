@@ -7,4 +7,5 @@ To Do:
  - all other playbooks assume presence of ansible user incl..keys
  - turn "static network config files" into templates (rubix-eth0 etc.)
  - also: rubix-dnsmasq-hosts.j2
+ - Readme: configure Raspi to final IP before running init_rubix.yml
 
