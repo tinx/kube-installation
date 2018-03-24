@@ -1,0 +1,64 @@
+---
+- name: Basic DNS setup
+  hosts: kube_install_hosts
+  remote_user: pi
+  become: true
+  tags:
+    - dns_setup
+  tasks:
+    - name: Annouce nameserver to resolvconf
+      lineinfile:
+        path: /etc/resolvconf.conf
+        regexp: '^(# |#)?name_servers='
+        line: 'name_servers={{ kube_nameserver }}'
+    - name: disable resolvconf
+      lineinfile:
+        path: /etc/resolvconf.conf
+        regexp: '^(# |#)?resolvconf='
+        line: 'resolvconf=NO'
+        state: present
+    - name: Add local nameserver
+      lineinfile:
+        path: /etc/resolv.conf
+        regexp: '.*nameserver.*'
+        line: 'nameserver {{ kube_nameserver }}'
+        state: present
+    
+- name: Upgrade packages and disable swap
+  hosts: kube_install_hosts
+  remote_user: pi
+  become: true
+  tags:
+    - upgrade_packages
+    - disable_swap
+  tasks:
+    - name: Is the host reachable and I can log in?
+      ping:
+    - name: Upgrade packages
+      apt:
+        update_cache: yes
+        upgrade: full
+    - name: Disable swap
+      service:
+        name: dphys-swapfile
+        enabled: false
+        state: stopped
+
+- name: Basic account and login setup
+  hosts: kube_install_hosts
+  remote_user: pi
+  become: true
+  tags:
+    - account_setup
+  tasks:
+    - name: Set up ansible account
+      include_role:
+        name: kube-account
+      vars:
+        kube_account_name: ansible
+        kube_account_comment: Ansible Automation
+        kube_account_sudo: true
+        kube_account_ssh_keys: '{{ kube_users|map(attribute="ssh_key")|list }}'
+#    - name: Lock 'pi' account password on Raspberry (login still possible)
+#      command: passwd -l pi
+#      changed_when: false
