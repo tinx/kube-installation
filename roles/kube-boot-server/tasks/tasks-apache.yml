@@ -4,3 +4,8 @@
     name: apache2
     state: present
 
+- name: Listen to internal interface, only.
+  lineinfile:
+    path: /etc/apache2/ports.conf
+    regexp: '^Listen'
+    line: 'Listen '
