@@ -1,20 +1,11 @@
 ---
 - name: Basic account and login setup
   hosts: kube_install_hosts
-  remote_user: pi
+  remote_user: ansible
   become: true
   tags:
     - account_setup
   tasks:
-    - name: Is the host reachable and I can log in?
-      ping:
-    - name: Create pi account
-      include_role:
-        name: kube-account
-      vars:
-        kube_account_name: pi
-        kube_account_sudo: true
-        kube_account_ssh_keys: '{{ kube_users|map(attribute="ssh_key")|list }}'
 #    - name: Lock 'pi' account password on Raspberry (login still possible)
 #      command: passwd -l pi
 #      changed_when: false
