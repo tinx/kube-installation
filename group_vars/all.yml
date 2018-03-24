@@ -1,5 +1,6 @@
 ---
 kube_nameserver: 192.168.0.8
+kube_domain: kube.packetloss.de
 
 kube_users:
   - username: !vault |

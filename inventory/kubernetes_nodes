@@ -1,8 +1,8 @@
 [kube_install_hosts]
-rubix		ansible_host=192.168.0.3
+rubix	external_ip=192.168.0.40 internal_ip=192.168.200.40
 
 [kube_nodes]
-kube1
-kube2
-kube3
+kube1	external_ip=192.168.0.41 internal_ip=192.168.200.41
+kube2	external_ip=192.168.0.42 internal_ip=192.168.200.42
+kube3	external_ip=192.168.0.43 internal_ip=192.168.200.43
 

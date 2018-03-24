@@ -1,7 +1,5 @@
-127.0.0.1       localhost localhost. localhost.kube.packetloss.de localhost.kube.packetloss.de.
+127.0.0.1       localhost localhost. localhost.{{ kube_domain }} localhost.{{ kube_domain }}.
 
-192.168.200.1   rubix.kube.packetloss.de rubix
-
-192.168.200.10  kube1.kube.packetloss.de kube1
-192.168.200.11  kube2.kube.packetloss.de kube2
-192.168.200.12  kube3.kube.packetloss.de kube3
+{% for host in groups["all"] %}
+{{ hostvars[host].internal_ip }}	{{ host }}.{{ kube_domain }} {{ host }}
+{% endfor %}
