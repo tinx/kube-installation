@@ -1,38 +1,60 @@
-Role Name
-=========
+kube-accounts
+=============
 
-A brief description of the role goes here.
+Sets up multiple user accounts with permission to sudo without a password and 
+an authorized ssh public key each. All these accounts can only log in using
+their respective ssh key.
 
-Requirements
-------------
+Also sets up an "ansible" account with permission to sudo without a password, 
+authorizing all the ssh public keys for it, so all the users can administer 
+the server using ansible.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Finally, disables root login with a password.
+
+If any changes were made, the ssh service is restarted at the end.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+* kube_accounts_userlist - a list of dictionaries with keys:
+  * username
+  * comment (optional, default "")
+  * ssh_key
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+kube-account
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Given a group_vars/all.yml file with this structure
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+    kube_users:
+      - username: tmusterfrau
+        comment: Tina Musterfrau
+        ssh_key: !vault |
+              $ANSIBLE_VAULT;1.1;AES256
+              [...]
+
+use the role like this:
+
+    - name: Basic account and login setup
+      hosts: servers
+      become: true
+      tasks:
+        - include_role:
+            name: kube-accounts
+          vars:
+            kube_accounts_userlist: '{{ kube_users }}'
 
 License
 -------
 
-BSD
+Apache 2.0
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+https://github.com/tinx
