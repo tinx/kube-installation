@@ -1,0 +1,10 @@
+To Do:
+
+ - "init/bootstrap playbook" for the Rhaspberry:
+   - creates ansible account, with keys
+   - removes "pi" account
+ - add reboot + wait after package changes
+ - all other playbooks assume presence of ansible user incl..keys
+ - turn "static network config files" into templates (rubix-eth0 etc.)
+ - also: rubix-dnsmasq-hosts.j2
+
