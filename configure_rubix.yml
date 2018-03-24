@@ -41,14 +41,16 @@
   tasks:
     - include_tasks: tasks/rubix-network-setup.yml
 
-- name: Configure dnsmasq
+- name: Configure PXE boot services
   hosts: kube_install_hosts
   remote_user: ansible
   become: true
   tags:
+    - pxe_setup
     - dnsmasq_setup
   tasks:
     - name: Configure boot server
       include_role:
         name: kube-boot-server
       vars: []
+
