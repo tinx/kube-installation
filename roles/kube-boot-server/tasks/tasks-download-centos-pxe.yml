@@ -3,7 +3,8 @@
   get_url:
     url: '{{ item.url }}'
     dest: '/opt/dnsmasq/tftp/{{ item.filename }}'
-    owner: root
+    checksum: '{{ item.checksum }}'
+    owner: dnsmasq
     group: root
     mode: 0644
   with_items:

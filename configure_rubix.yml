@@ -52,5 +52,6 @@
     - name: Configure boot server
       include_role:
         name: kube-boot-server
-      vars: []
+      vars:
+        kube_accounts_userlist: '{{ kube_users }}'
 

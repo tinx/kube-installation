@@ -4,3 +4,8 @@
     name: dnsmasq
     state: restarted
   listen: restart dnsmasq
+- name: restart apache2
+  service:
+    name: apache2
+    state: restarted
+  listen: restart apache2

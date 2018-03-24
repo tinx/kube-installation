@@ -14,7 +14,6 @@
     - /opt/dnsmasq
     - /opt/dnsmasq/etc
     - /opt/dnsmasq/tftp
-    - /opt/dnsmasq/tftp/pxeboot
     - /opt/dnsmasq/conf.d
     - /opt/dnsmasq/local_hosts
 - name: Create the OTHER config directory
@@ -24,6 +23,7 @@
     group: root
     state: directory
   with_items:
+    - /opt/dnsmasq/tftp/pxeboot
     - /opt/dnsmasq/var
 - name: Adjust dnsmasq defaults
   template:
@@ -70,7 +70,7 @@
   template:
     src: rubix-dnsmasq-grub.conf.j2
     dest: /opt/dnsmasq/tftp/grub.cfg
-    owner: root
+    owner: dnsmasq
     group: root
     mode: 0644
 

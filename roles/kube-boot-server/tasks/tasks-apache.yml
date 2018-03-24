@@ -5,7 +5,58 @@
     state: present
 
 - name: Listen to internal interface, only.
-  lineinfile:
-    path: /etc/apache2/ports.conf
-    regexp: '^Listen'
-    line: 'Listen '
+  template:
+    src: rubix-apache2-ports.conf.j2
+    dest: /etc/apache2/ports.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart apache2
+
+- name: Create content directories
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - /var/www/html/pxe
+    - /var/www/html/pxe/centos
+    - /var/www/html/kickstart
+    - /var/www/html/centos
+    - /var/www/html/centos/7
+    - /var/www/html/centos/7/isos
+    - /var/www/html/centos/7/isos/x86_64
+
+- name: Render kickstart config file
+  template:
+    src: rubix-kickstart-generic.j2
+    dest: /var/www/html/kickstart/generic.ks
+    owner: root
+    group: root
+    mode: 0444
+
+- name: Download CentOS ISO
+  get_url:
+    url: http://mirror.eu.oneandone.net/linux/distributions/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso
+    dest: /var/www/html/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso
+    checksum: 'sha256:bba314624956961a2ea31dd460cd860a77911c1e0a56e4820a12b9c5dad363f5'
+    owner: root
+    group: root
+    mode: 0644
+
+#- name: Add mount options to fstab
+#  lineinfile:
+#    path: /etc/fstab
+#    regexp: 'node_os'
+#    line: '/var/www/html/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso //var/www/html/node_os  auto ro,loop 0 0'
+
+- name: Mount CentOS ISO
+  mount:
+    path: /var/www/html/pxe/centos
+    src: /var/www/html/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso
+    opts: ro,loop
+    fstype: auto
+    state: mounted
+
