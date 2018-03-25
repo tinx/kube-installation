@@ -11,12 +11,8 @@
     line: 'resolvconf=NO'
     state: present
 - name: Disable WLAN and Bluetooth
-  copy:
-    src: raspi-blacklist.conf
-    dest: /etc/modprobe.d/raspi-blacklist.conf
-    owner: root
-    group: root
-    mode: 0644
+  include_role:
+    name: kube-net-disable-wlan-bluetooth
 - name: Disable IPv6
   include_role:
     name: kube-disable-ipv6

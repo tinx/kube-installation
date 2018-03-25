@@ -1,0 +1,8 @@
+---
+- name: Disable WLAN and Bluetooth
+  copy:
+    src: raspi-blacklist.conf
+    dest: /etc/modprobe.d/raspi-blacklist.conf
+    owner: root
+    group: root
+    mode: 0644
