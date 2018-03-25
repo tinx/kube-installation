@@ -46,12 +46,6 @@
     group: root
     mode: 0644
 
-#- name: Add mount options to fstab
-#  lineinfile:
-#    path: /etc/fstab
-#    regexp: 'node_os'
-#    line: '/var/www/html/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso //var/www/html/node_os  auto ro,loop 0 0'
-
 - name: Mount CentOS ISO
   mount:
     path: /var/www/html/pxe/centos
