@@ -1,0 +1,18 @@
+---
+- name: Annouce nameserver to resolvconf
+  lineinfile:
+    path: /etc/resolvconf.conf
+    regexp: '^(# |#)?name_servers='
+    line: 'name_servers={{ kube_net_static_nameserver }}'
+- name: Disable resolvconf
+  lineinfile:
+    path: /etc/resolvconf.conf
+    regexp: '^(# |#)?resolvconf='
+    line: 'resolvconf=NO'
+    state: present
+- name: Statically set local nameserver
+  lineinfile:
+    path: /etc/resolv.conf
+    regexp: '.*nameserver.*'
+    line: 'nameserver {{ kube_net_static_nameserver }}'
+    state: present

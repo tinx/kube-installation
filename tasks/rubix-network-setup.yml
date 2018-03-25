@@ -1,15 +1,4 @@
 ---
-- name: Annouce nameserver to resolvconf
-  lineinfile:
-    path: /etc/resolvconf.conf
-    regexp: '^(# |#)?name_servers='
-    line: 'name_servers={{ kube_nameserver }}'
-- name: disable resolvconf
-  lineinfile:
-    path: /etc/resolvconf.conf
-    regexp: '^(# |#)?resolvconf='
-    line: 'resolvconf=NO'
-    state: present
 - name: Disable WLAN and Bluetooth
   include_role:
     name: kube-net-disable-wlan-bluetooth
@@ -45,10 +34,8 @@
     name: dhcpcd
     enabled: false
     state: stopped
-- name: Add local nameserver
-  lineinfile:
-    path: /etc/resolv.conf
-    regexp: '.*nameserver.*'
-    line: 'nameserver {{ kube_nameserver }}'
-    state: present
-
+- name: Configure static dns resolver
+  include_role:
+    name: kube-net-static-dns-resolver
+  vars:
+    kube_net_static_nameserver: '{{ kube_nameserver }}'

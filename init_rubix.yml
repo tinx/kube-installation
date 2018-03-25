@@ -6,24 +6,11 @@
   tags:
     - dns_setup
   tasks:
-    - name: Annouce nameserver to resolvconf
-      lineinfile:
-        path: /etc/resolvconf.conf
-        regexp: '^(# |#)?name_servers='
-        line: 'name_servers={{ kube_nameserver }}'
-    - name: disable resolvconf
-      lineinfile:
-        path: /etc/resolvconf.conf
-        regexp: '^(# |#)?resolvconf='
-        line: 'resolvconf=NO'
-        state: present
-    - name: Add local nameserver
-      lineinfile:
-        path: /etc/resolv.conf
-        regexp: '.*nameserver.*'
-        line: 'nameserver {{ kube_nameserver }}'
-        state: present
-    
+    - include_role:
+        name: kube-net-static-dns-resolver
+      vars:
+        kube_net_static_nameserver: '{{ kube_nameserver }}'
+
 - name: Upgrade packages and disable swap
   hosts: kube_install_hosts
   remote_user: pi
