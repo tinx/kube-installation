@@ -19,12 +19,9 @@
     - upgrade_packages
     - disable_swap
   tasks:
-    - name: Is the host reachable and I can log in?
-      ping:
     - name: Upgrade packages
-      apt:
-        update_cache: yes
-        upgrade: full
+      include_role:
+        name: kube-upgrade-packages
     - name: Disable swap
       include_role:
         name: kube-disable-swap
