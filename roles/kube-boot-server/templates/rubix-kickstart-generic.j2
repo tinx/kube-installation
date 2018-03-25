@@ -56,7 +56,7 @@ reboot
 mkdir -m0700 /home/ansible/.ssh/
 chown ansible:ansible /home/ansible/.ssh
 cat <<EOF >/home/ansible/.ssh/authorized_keys
-{% for key in kube_accounts_userlist|map(attribute="ssh_key")|list %}
+{% for key in kube_boot_server_ssh_keys %}
 {{ key }}
 {% endfor %}
 EOF
