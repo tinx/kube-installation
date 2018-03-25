@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - kube-disable-ipv6
+    - kube-net-disable-ipv6

@@ -1,5 +1,5 @@
-kube-disable-ipv6
-=================
+kube-net-disable-ipv6
+=====================
 
 Completely disables ipv6.
 
@@ -11,7 +11,7 @@ Example Playbook
       become: true
       tasks:
         - include_role:
-            name: kube-disable-ipv6
+            name: kube-net-disable-ipv6
 
 License
 -------

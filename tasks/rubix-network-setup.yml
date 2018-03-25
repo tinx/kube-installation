@@ -15,7 +15,7 @@
     name: kube-net-disable-wlan-bluetooth
 - name: Disable IPv6
   include_role:
-    name: kube-disable-ipv6
+    name: kube-net-disable-ipv6
 - name: Configure static interfaces - add include for eth0
   lineinfile:
     path: /etc/network/interfaces
