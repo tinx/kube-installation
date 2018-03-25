@@ -5,35 +5,10 @@
 - name: Disable IPv6
   include_role:
     name: kube-net-disable-ipv6
-- name: Configure static interfaces - add include for eth0
-  lineinfile:
-    path: /etc/network/interfaces
-    line: '{{ item }}'
-    state: present
-  with_items:
-    - 'source /etc/network/interfaces.d/eth0'
-    - 'source /etc/network/interfaces.d/eth0.200'
-- name: Configure static interfaces - remove directory-include
-  lineinfile:
-    path: /etc/network/interfaces
-    line: '# source-directory /etc/network/interfaces.d'
-    regexp: '^(# |#)?source-directory /etc/network/interfaces.d'
-    state: present
-- name: Render static interface config
-  template:
-    src: 'rubix-{{ item }}.j2'
-    dest: '/etc/network/interfaces.d/{{ item }}'
-    owner: root
-    group: root
-    mode: 0644
-  with_items:
-    - eth0
-    - eth0.200
-- name: Disable and stop DHCP client
-  service:
-    name: dhcpcd
-    enabled: false
-    state: stopped
+- name: Configure static interfaces with vlans
+  include_role:
+    name: kube-net-static-ips-two-vlans
+  # todo vars
 - name: Configure static dns resolver
   include_role:
     name: kube-net-static-dns-resolver
