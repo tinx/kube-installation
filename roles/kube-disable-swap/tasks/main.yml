@@ -1,0 +1,6 @@
+---
+- name: Disable swap
+  service:
+    name: dphys-swapfile
+    enabled: false
+    state: stopped

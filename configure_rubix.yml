@@ -12,10 +12,8 @@
         update_cache: yes
         upgrade: full
     - name: Disable swap
-      service:
-        name: dphys-swapfile
-        enabled: false
-        state: stopped
+      include_role:
+        name: kube-disable-swap
 
 - name: Basic account and login setup
   hosts: kube_install_hosts
