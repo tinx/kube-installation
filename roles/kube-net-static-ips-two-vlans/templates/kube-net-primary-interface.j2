@@ -1,0 +1,10 @@
+auto {{ kube_net_interface }}
+
+iface {{ kube_net_interface }} inet static
+        address {{ kube_net_primary_ip }}
+        netmask {{ kube_net_primary_netmask }}
+        network {{ kube_net_primary_network }}
+        broadcast {{ kube_net_primary_broadcast }}
+{% if kube_net_primary_gateway is defined %}        gateway {{ kube_net_primary_gateway }}
+{% endif %}
+

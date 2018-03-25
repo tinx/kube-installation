@@ -5,24 +5,28 @@
     line: '{{ item }}'
     state: present
   with_items:
-    - 'source /etc/network/interfaces.d/eth0'
-    - 'source /etc/network/interfaces.d/eth0.200'
+    - 'source /etc/network/interfaces.d/{{ kube_net_interface }}'
+    - 'source /etc/network/interfaces.d/{{ kube_net_interface }}.{{ kube_net_secondary_vlan }}'
 - name: Configure static interfaces - remove directory-include
   lineinfile:
     path: /etc/network/interfaces
     line: '# source-directory /etc/network/interfaces.d'
     regexp: '^(# |#)?source-directory /etc/network/interfaces.d'
     state: present
-- name: Render static interface config
+- name: Render static ip config for primary interface
   template:
-    src: 'rubix-{{ item }}.j2'
-    dest: '/etc/network/interfaces.d/{{ item }}'
+    src: 'kube-net-primary-interface.j2'
+    dest: '/etc/network/interfaces.d/{{ kube_net_interface }}'
     owner: root
     group: root
     mode: 0644
-  with_items:
-    - eth0
-    - eth0.200
+- name: Render static ip config for secondary interface
+  template:
+    src: 'kube-net-secondary-interface.j2'
+    dest: '/etc/network/interfaces.d/{{ kube_net_interface }}.{{ kube_net_secondary_vlan }}'
+    owner: root
+    group: root
+    mode: 0644
 - name: Disable and stop DHCP client
   service:
     name: dhcpcd

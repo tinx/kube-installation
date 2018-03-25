@@ -1,0 +1,10 @@
+auto {{ kube_net_interface }}.{{ kube_net_secondary_vlan }}
+
+iface {{ kube_net_interface }}.{{ kube_net_secondary_vlan }} inet static
+        address {{ kube_net_secondary_ip }}
+        netmask {{ kube_net_secondary_netmask }}
+        network {{ kube_net_secondary_network }}
+        broadcast {{ kube_net_secondary_broadcast }}
+{% if kube_net_secondary_gateway is defined %}        gateway {{ kube_net_secondary_gateway }}
+{% endif %}
+

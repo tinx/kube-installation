@@ -8,7 +8,18 @@
 - name: Configure static interfaces with vlans
   include_role:
     name: kube-net-static-ips-two-vlans
-  # todo vars
+  vars:
+    kube_net_interface: eth0
+    kube_net_primary_ip: '{{ external_ip }}'
+    kube_net_primary_netmask: '{{ kube_networks.external.netmask }}'
+    kube_net_primary_network: '{{ kube_networks.external.network }}'
+    kube_net_primary_broadcast: '{{ kube_networks.external.broadcast }}'
+    kube_net_primary_gateway: '{{ kube_networks.external.gateway }}'
+    kube_net_secondary_vlan: 200
+    kube_net_secondary_ip: '{{ internal_ip }}'
+    kube_net_secondary_netmask: '{{ kube_networks.internal.netmask }}'
+    kube_net_secondary_network: '{{ kube_networks.internal.network }}'
+    kube_net_secondary_broadcast: '{{ kube_networks.internal.broadcast }}'
 - name: Configure static dns resolver
   include_role:
     name: kube-net-static-dns-resolver
