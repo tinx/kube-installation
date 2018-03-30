@@ -1,0 +1,28 @@
+---
+- name: Load 802.1q kernel module now
+  modprobe:
+    name: 8021q
+    state: present
+- name: Load 802.1q kernel module again on reboot
+  lineinfile:
+    path: /etc/modules-load.d/010-vlan-8021q.conf
+    line: '8021q'
+    state: present
+    create: yes
+    owner: root
+    group: root
+    mode: 0644
+- name: Render static ip config for primary interface
+  template:
+    src: 'centos-net-primary-interface.j2'
+    dest: '/etc/sysconfig/network-scripts/ifcfg-{{ kube_net_interface }}'
+    owner: root
+    group: root
+    mode: 0644
+- name: Render static ip config for secondary interface
+  template:
+    src: 'centos-net-secondary-interface.j2'
+    dest: '/etc/sysconfig/network-scripts/ifcfg-{{ kube_net_interface }}.{{ kube_net_secondary_vlan }}'
+    owner: root
+    group: root
+    mode: 0644

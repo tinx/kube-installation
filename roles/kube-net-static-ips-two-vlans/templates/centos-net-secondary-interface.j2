@@ -1,0 +1,13 @@
+NAME="{{ kube_net_interface }}.{{ kube_net_secondary_vlan }}"
+DEVICE="{{ kube_net_interface }}.{{ kube_net_secondary_vlan }}"
+ONBOOT=yes
+VLAN=yes
+IPV6INIT=no
+BOOTPROTO=none
+IPADDR={{ kube_net_secondary_ip }}
+NETMASK={{ kube_net_secondary_netmask }}
+NETWORK={{ kube_net_secondary_network }}
+BROADCAST={{ kube_net_secondary_broadcast }}
+{% if kube_net_secondary_gateway is defined %}GATEWAY={{ kube_net_secondary_gateway }}
+DEFROUTE=yes
+{% endif %}

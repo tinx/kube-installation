@@ -1,34 +1,5 @@
 ---
-- name: Configure static interfaces - add include for eth0
-  lineinfile:
-    path: /etc/network/interfaces
-    line: '{{ item }}'
-    state: present
-  with_items:
-    - 'source /etc/network/interfaces.d/{{ kube_net_interface }}'
-    - 'source /etc/network/interfaces.d/{{ kube_net_interface }}.{{ kube_net_secondary_vlan }}'
-- name: Configure static interfaces - remove directory-include
-  lineinfile:
-    path: /etc/network/interfaces
-    line: '# source-directory /etc/network/interfaces.d'
-    regexp: '^(# |#)?source-directory /etc/network/interfaces.d'
-    state: present
-- name: Render static ip config for primary interface
-  template:
-    src: 'kube-net-primary-interface.j2'
-    dest: '/etc/network/interfaces.d/{{ kube_net_interface }}'
-    owner: root
-    group: root
-    mode: 0644
-- name: Render static ip config for secondary interface
-  template:
-    src: 'kube-net-secondary-interface.j2'
-    dest: '/etc/network/interfaces.d/{{ kube_net_interface }}.{{ kube_net_secondary_vlan }}'
-    owner: root
-    group: root
-    mode: 0644
-- name: Disable and stop DHCP client
-  service:
-    name: dhcpcd
-    enabled: false
-    state: stopped
+- include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+- include_tasks: centos.yml
+  when: ansible_os_family == "RedHat"

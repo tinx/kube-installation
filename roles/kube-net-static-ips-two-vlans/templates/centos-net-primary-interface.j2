@@ -1,0 +1,14 @@
+NAME="{{ kube_net_interface }}"
+DEVICE="{{ kube_net_interface }}"
+ONBOOT=yes
+NETBOOT=yes
+IPV6INIT=no
+BOOTPROTO=none
+TYPE=Ethernet
+IPADDR={{ kube_net_primary_ip }}
+NETMASK={{ kube_net_primary_netmask }}
+NETWORK={{ kube_net_primary_network }}
+BROADCAST={{ kube_net_primary_broadcast }}
+{% if kube_net_primary_gateway is defined %}GATEWAY={{ kube_net_primary_gateway }}
+DEFROUTE=yes
+{% endif %}

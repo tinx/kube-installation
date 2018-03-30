@@ -9,3 +9,24 @@
     - name: Disable swap
       include_role:
         name: kube-disable-swap
+
+- name: Basic account and login setup
+  hosts: kube_nodes
+  remote_user: ansible
+  become: true
+  tags:
+    - account_setup
+  tasks:
+    - include_role:
+        name: kube-accounts
+      vars:
+        kube_accounts_userlist: '{{ kube_users }}'
+
+- name: Configure network
+  hosts: kube_nodes
+  remote_user: ansible
+  become: true
+  tags:
+    - network_setup
+  tasks:
+    - include_tasks: tasks/kubes-network-setup.yml

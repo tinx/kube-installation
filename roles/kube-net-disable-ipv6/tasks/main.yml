@@ -6,3 +6,10 @@
     owner: root
     group: root
     mode: 0644
+- name: restrict sshd to ipv4 to keep X forwarding functional
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: 'AddressFamily inet'
+    regexp: '^#?AddressFamily'
+    state: present
+  notify: restart sshd

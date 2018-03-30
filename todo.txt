@@ -12,6 +12,12 @@ To Do:
  - re-mount ISO handler if download received a new file
  - preserve ssh hostkeys for nodes and rubix
 
+ - rubix won't resolve the nodes on the 200 network (maybe add to etc hosts?)
+ - if we install postfix, we may need to change its /etc/postfix/main.cf to say
+  inet_interfaces = 127.0.0.1
+  instead of
+  #inet_interfaces = localhost
+  to allow it to start.
 
- - rubix doesn't know its own hostname is rubix
- - rubix won't resolve the nodes on the 200 network
+ - restart network after configuring it
+ - add static /etc/hosts configuration in kube-net-static-dns-resolver (draft commented out)
