@@ -1,18 +1,17 @@
 To Do:
 
  - "init/bootstrap playbook" for the Rhaspberry:
-   - creates ansible account, with keys
    - removes "pi" account
  - add reboot + wait after package changes
- - all other playbooks assume presence of ansible user incl..keys
  - Readme: configure Raspi to final IP before running init_rubix.yml
- - limit the 'ansible' account to only allow password logins from the console
+ - limit password logins to the console
  - configure repos for nodes to use rubix as a repo source
    - avoid installing internet surprise updates
    - don't forget to adjust kickstart file
- - fix: do not access global variables (or hostvars) inside roles
  - the CentOS release version is still hard-coded. (7.4.1708)
  - re-mount ISO handler if download received a new file
  - preserve ssh hostkeys for nodes and rubix
 
 
+ - rubix doesn't know its own hostname is rubix
+ - rubix won't resolve the nodes on the 200 network
