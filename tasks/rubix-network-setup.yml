@@ -24,4 +24,4 @@
   include_role:
     name: kube-net-static-dns-resolver
   vars:
-    kube_net_static_nameserver: '{{ kube_nameserver }}'
+    kube_net_static_nameserver: '{{ kube_networks.external.nameserver }}'

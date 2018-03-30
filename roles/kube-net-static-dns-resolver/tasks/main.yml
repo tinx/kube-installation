@@ -18,11 +18,15 @@
     regexp: '.*nameserver.*'
     line: 'nameserver {{ kube_net_static_nameserver }}'
     state: present
+  when: ansible_os_family == "Debian"
+- name: Statically set local nameservers (control node first)
+  template:
+    src: resolv.conf.j2
+    dest: '/etc/resolv.conf'
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == "RedHat"
 - name: Hard configure the host name
   hostname:
     name: '{{ inventory_hostname }}'
-#- name: Hard configure host name in /etc/hosts
-#  lineinfile:
-#    path: /etc/hosts
-#    line: '{{ ??? }}'
-#    state: present

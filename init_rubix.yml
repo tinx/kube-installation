@@ -9,7 +9,7 @@
     - include_role:
         name: kube-net-static-dns-resolver
       vars:
-        kube_net_static_nameserver: '{{ kube_nameserver }}'
+        kube_net_static_nameserver: '{{ kube_networks.external.nameserver }}'
 
 - name: Upgrade packages and disable swap
   hosts: kube_install_hosts

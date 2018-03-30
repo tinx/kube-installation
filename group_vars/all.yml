@@ -1,6 +1,4 @@
 ---
-kube_nameserver: 192.168.0.8
-
 kube_networks:
   internal:
     network: 192.168.200.0
@@ -8,11 +6,13 @@ kube_networks:
     netmask: 255.255.255.0
     broadcast: 192.168.200.255
     domain: kube.packetloss.de
+    nameserver: 192.168.200.40
   external:
     network: 192.168.0.0
     netmask: 255.255.255.0
     gateway: 192.168.0.8
     broadcast: 192.168.0.255
+    nameserver: 192.168.0.8
 
 kube_crypted_ansible_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
