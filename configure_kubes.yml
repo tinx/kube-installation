@@ -1,0 +1,11 @@
+---
+- name: Disable swap
+  hosts: kube_nodes
+  remote_user: ansible
+  become: true
+  tags:
+    - disable_swap
+  tasks:
+    - name: Disable swap
+      include_role:
+        name: kube-disable-swap

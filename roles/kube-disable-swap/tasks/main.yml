@@ -4,3 +4,13 @@
     name: dphys-swapfile
     enabled: false
     state: stopped
+  when: ansible_distribution == "Debian"
+- name: Disable swap for currently running system
+  command: swapoff -a
+  when: ansible_distribution == "CentOS" and ansible_swaptotal_mb > 0
+- name: Remove swap entry from /etc/fstab
+  mount:
+    name: swap
+    fstype: swap
+    state: absent
+  when: ansible_distribution == "CentOS"
