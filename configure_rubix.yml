@@ -28,13 +28,13 @@
   tags:
     - account_setup
   tasks:
-#    - name: Lock 'pi' account password on Raspberry (login still possible)
-#      command: passwd -l pi
-#      changed_when: false
     - include_role:
         name: kube-accounts
       vars:
         kube_accounts_userlist: '{{ kube_users }}'
+    - name: Lock 'pi' account password (ssh login with key will still work, on console use "ansible" for login)
+      command: passwd -l pi
+      changed_when: false
 
 - name: Configure network
   hosts: kube_install_hosts

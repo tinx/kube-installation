@@ -48,6 +48,3 @@
         kube_account_comment: Ansible Automation
         kube_account_sudo: true
         kube_account_ssh_keys: '{{ kube_users|map(attribute="ssh_key")|list }}'
-#    - name: Lock 'pi' account password on Raspberry (login still possible)
-#      command: passwd -l pi
-#      changed_when: false
