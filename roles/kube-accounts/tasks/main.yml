@@ -1,10 +1,44 @@
 ---
-- name: Disable ssh root login completely
+- name: Disable ssh root login
   lineinfile:
     path: /etc/ssh/sshd_config
     line: 'PermitRootLogin no'
-    regexp: '^#?PermitRootLogin'
+    regexp: '^PermitRootLogin'
     state: present
+  notify: restart sshd
+- name: Remove any PermitRootLogin comments
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^# *PermitRootLogin'
+    state: absent
+  notify: restart sshd
+
+- name: Disable ssh password authentication - PasswordAuthentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: 'PasswordAuthentication no'
+    regexp: '^PasswordAuthentication'
+    state: present
+  notify: restart sshd
+- name: Remove any PasswordAuthentication comments
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^# *PasswordAuthentication'
+    state: absent
+  notify: restart sshd
+
+- name: Disable ssh password authentication - ChallengeResponseAuthentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: 'ChallengeResponseAuthentication no'
+    regexp: '^ChallengeResponseAuthentication'
+    state: present
+  notify: restart sshd
+- name: Remove any ChallengeResponseAuthentication comments
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^# *ChallengeResponseAuthentication'
+    state: absent
   notify: restart sshd
 
 - name: Create ansible account
