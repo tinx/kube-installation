@@ -12,7 +12,6 @@ To Do:
  - re-mount ISO handler if download received a new file
  - preserve ssh hostkeys for nodes and rubix
 
- - rubix won't resolve the nodes on the 200 network (maybe add to etc hosts?)
  - if we install postfix, we may need to change its /etc/postfix/main.cf to say
   inet_interfaces = 127.0.0.1
   instead of
@@ -20,4 +19,7 @@ To Do:
   to allow it to start.
 
  - restart network after configuring it
- - add static /etc/hosts configuration in kube-net-static-dns-resolver (draft commented out)
+
+ - install NTP for Ceph
+
+https://www.howtoforge.com/tutorial/how-to-build-a-ceph-cluster-on-centos-7/

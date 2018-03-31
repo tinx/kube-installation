@@ -12,21 +12,13 @@
     line: 'resolvconf=NO'
     state: present
   when: ansible_os_family == "Debian"
-- name: Statically set local nameserver
-  lineinfile:
-    path: /etc/resolv.conf
-    regexp: '.*nameserver.*'
-    line: 'nameserver {{ kube_net_static_nameserver }}'
-    state: present
-  when: ansible_os_family == "Debian"
-- name: Statically set local nameservers (control node first)
+- name: Statically set local nameserver(s)
   template:
     src: resolv.conf.j2
     dest: '/etc/resolv.conf'
     owner: root
     group: root
     mode: 0644
-  when: ansible_os_family == "RedHat"
 - name: Hard configure the host name
   hostname:
     name: '{{ inventory_hostname }}'

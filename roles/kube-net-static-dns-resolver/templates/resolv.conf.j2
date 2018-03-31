@@ -1,3 +1,5 @@
 # created by ansible role kube-net-static-dns-resolver
+{% if kube_net_internal_nameserver is defined -%}
 nameserver {{ kube_net_internal_nameserver }}
+{% endif %}
 nameserver {{ kube_net_static_nameserver }}
