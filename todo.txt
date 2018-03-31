@@ -8,7 +8,6 @@ To Do:
  - configure repos for nodes to use rubix as a repo source
    - avoid installing internet surprise updates
    - don't forget to adjust kickstart file
- - the CentOS release version is still hard-coded. (7.4.1708)
  - re-mount ISO handler if download received a new file
  - preserve ssh hostkeys for nodes and rubix
 
@@ -29,8 +28,19 @@ To Do:
     3. Ceph OSD
     4. CephFS
 
+https://ceph.com/install/
+https://public.centerdevice.de/d72fea90-0d1f-4f7d-8cf2-404603a94032 -- pdf article
 https://www.howtoforge.com/tutorial/how-to-build-a-ceph-cluster-on-centos-7/
+http://docs.ceph.com/docs/master/install/
+http://docs.ceph.com/docs/master/install/install-storage-cluster/
 
 3. NTP auf rubix und kubes
 4. Raspbian auto-updates
 5. Kubes auto-updates
+
+https://wiki.centos.org/HowTos/CreateLocalMirror
+ - see the last section on carrying only a subset of the repo (DVD + updates?)
+ - also, http://docs.ansible.com/ansible/latest/modules/yum_repository_module.html
+
+limiting password logins to console:
+https://serverfault.com/questions/406839/only-allow-password-authentication-to-ssh-server-from-internal-network

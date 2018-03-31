@@ -14,6 +14,8 @@ kube_networks:
     broadcast: 192.168.0.255
     nameserver: 192.168.0.8
 
+kube_centos_version: 7.4.1708
+
 kube_crypted_ansible_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           61663330626262383935643638326133393036363861353936363965643938643133633432663563

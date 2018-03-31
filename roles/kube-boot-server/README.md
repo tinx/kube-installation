@@ -25,6 +25,7 @@ Correspondingly, it assumes a very specific setup of your inventory. See invento
 Role Variables
 --------------
 
+* kube_boot_server_centos_version - the full version number of the ISO and pxe files to provide (e.g. "7.4.1708")
 * kube_boot_server_ssh_keys - a list of ssh public keys to add to the authorized_keys of the "ansible" account on installed nodes
 
 Note: also see the Requirements section.

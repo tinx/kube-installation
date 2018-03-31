@@ -28,9 +28,9 @@
     - /var/www/html/centos/7
     - /var/www/html/centos/7/isos
     - /var/www/html/centos/7/isos/x86_64
-    - /var/www/html/centos/7.4.1708
-    - /var/www/html/centos/7.4.1708/updates
-    - /var/www/html/centos/7.4.1708/updates/x86_64
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates/x86_64'
 
 - name: Render kickstart config file
   template:
@@ -58,4 +58,4 @@
     state: mounted
 
 - name: Mirror CentOS updates
-  command: 'rsync -rtS --delete --exclude "local*" --exclude "isos" rsync://mirror.eu.oneandone.net/centos/7.4.1708/updates/x86_64/ /var/www/html/centos/7.4.1708/updates/x86_64/'
+  command: 'rsync -rtS --delete --exclude "local*" --exclude "isos" rsync://mirror.eu.oneandone.net/centos/{{ kube_boot_server_centos_version }}/updates/x86_64/ /var/www/html/centos/{{ kube_boot_server_centos_version }}/updates/x86_64/'
