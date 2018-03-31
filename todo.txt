@@ -15,7 +15,11 @@ To Do:
 
  - always reboot after configuring network on rubix
 
- - rebootbenachrichtigung nach updates
+ - notify about reboot after updates
+
+ - use rubix's name instead of ip for update mirroring
+
+ - after setting up the mirror, update yum cache
 
  - disk setup plan:
     1. crypt
@@ -35,5 +39,5 @@ https://wiki.centos.org/HowTos/CreateLocalMirror
 
 Current plan:
 3. NTP auf rubix und kubes
-4. Rubix cron-job that runs ansible on itself -> auto update + update centos mirror
+4. Rubix cron-job that runs auto update + update centos mirror
 5. Kubes auto-updates (? but what if it breaks them ? cron timer that only updates if other responds?)
