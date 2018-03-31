@@ -11,17 +11,24 @@
       vars:
         kube_net_static_nameserver: '{{ kube_networks.external.nameserver }}'
 
-- name: Upgrade packages and disable swap
+- name: Upgrade packages
   hosts: kube_install_hosts
   remote_user: pi
   become: true
   tags:
     - upgrade_packages
-    - disable_swap
   tasks:
     - name: Upgrade packages
       include_role:
         name: kube-upgrade-packages
+
+- name: Disable swap
+  hosts: kube_install_hosts
+  remote_user: pi
+  become: true
+  tags:
+    - disable_swap
+  tasks:
     - name: Disable swap
       include_role:
         name: kube-disable-swap
