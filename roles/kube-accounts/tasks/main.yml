@@ -6,12 +6,6 @@
     regexp: '^PermitRootLogin'
     state: present
   notify: restart sshd
-- name: Remove any PermitRootLogin comments
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^# *PermitRootLogin'
-    state: absent
-  notify: restart sshd
 
 - name: Disable ssh password authentication - PasswordAuthentication
   lineinfile:
@@ -20,12 +14,6 @@
     regexp: '^PasswordAuthentication'
     state: present
   notify: restart sshd
-- name: Remove any PasswordAuthentication comments
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^# *PasswordAuthentication'
-    state: absent
-  notify: restart sshd
 
 - name: Disable ssh password authentication - ChallengeResponseAuthentication
   lineinfile:
@@ -33,12 +21,6 @@
     line: 'ChallengeResponseAuthentication no'
     regexp: '^ChallengeResponseAuthentication'
     state: present
-  notify: restart sshd
-- name: Remove any ChallengeResponseAuthentication comments
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^# *ChallengeResponseAuthentication'
-    state: absent
   notify: restart sshd
 
 - name: Create ansible account
