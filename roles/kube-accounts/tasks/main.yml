@@ -1,8 +1,8 @@
 ---
-- name: Disable ssh root login using password authentication
+- name: Disable ssh root login completely
   lineinfile:
     path: /etc/ssh/sshd_config
-    line: 'PermitRootLogin prohibit-password'
+    line: 'PermitRootLogin no'
     regexp: '^#?PermitRootLogin'
     state: present
   notify: restart sshd
