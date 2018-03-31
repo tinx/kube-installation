@@ -18,7 +18,7 @@ To Do:
   #inet_interfaces = localhost
   to allow it to start.
 
- - restart network after configuring it
+ - always reboot after configuring network on rubix
 
  - install NTP for Ceph
  - rebootbenachrichtigung nach updates
@@ -31,8 +31,6 @@ To Do:
 
 https://www.howtoforge.com/tutorial/how-to-build-a-ceph-cluster-on-centos-7/
 
-1. makefile
-2. centos paketmirror auf rubix
 3. NTP auf rubix und kubes
 4. Raspbian auto-updates
 5. Kubes auto-updates
