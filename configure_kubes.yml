@@ -30,3 +30,16 @@
     - network_setup
   tasks:
     - include_tasks: tasks/kubes-network-setup.yml
+
+- name: Configure Rubix as repository for Centos updates and run updates
+  hosts: kube_nodes
+  remote_user: ansible
+  become: true
+  tags:
+    - upgrade_packages
+  tasks:
+    - include_role:
+        name: kube-upgrade-packages
+      vars:
+        kube_upgrade_packages_mirror_base_url: 'http://{{ hostvars["rubix"].internal_ip }}'
+        kube_upgrade_packages_centos_version: '{{ kube_centos_version }}'

@@ -1,5 +1,5 @@
 ---
-- name: Upgrade packages
-  apt:
-    update_cache: yes
-    upgrade: full
+- include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+- include_tasks: centos.yml
+  when: ansible_os_family == "RedHat"

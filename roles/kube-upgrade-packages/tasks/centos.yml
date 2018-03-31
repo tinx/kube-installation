@@ -1,0 +1,18 @@
+---
+- name: Set baseurl
+  ini_file:
+    path: /etc/yum.repos.d/CentOS-Base.repo
+    section: updates
+    option: baseurl
+    value: '{{ kube_upgrade_packages_mirror_base_url }}/centos/{{ kube_upgrade_packages_centos_version }}/updates/$basearch/'
+    no_extra_spaces: yes
+- name: Remove mirrorlist
+  ini_file:
+    path: /etc/yum.repos.d/CentOS-Base.repo
+    section: updates
+    option: mirrorlist
+    state: absent
+- name: Install updates
+  yum:
+    name: '*'
+    state: latest

@@ -1,10 +1,6 @@
 To Do:
 
- - "init/bootstrap playbook" for the Rhaspberry:
-   - removes "pi" account
  - add reboot + wait after package changes
- - Readme: configure Raspi to final IP before running init_rubix.yml
- - limit password logins to the console
  - configure repos for nodes to use rubix as a repo source
    - avoid installing internet surprise updates
    - don't forget to adjust kickstart file
@@ -19,7 +15,6 @@ To Do:
 
  - always reboot after configuring network on rubix
 
- - install NTP for Ceph
  - rebootbenachrichtigung nach updates
 
  - disk setup plan:
@@ -34,13 +29,11 @@ https://www.howtoforge.com/tutorial/how-to-build-a-ceph-cluster-on-centos-7/
 http://docs.ceph.com/docs/master/install/
 http://docs.ceph.com/docs/master/install/install-storage-cluster/
 
-3. NTP auf rubix und kubes
-4. Raspbian auto-updates
-5. Kubes auto-updates
-
 https://wiki.centos.org/HowTos/CreateLocalMirror
  - see the last section on carrying only a subset of the repo (DVD + updates?)
  - also, http://docs.ansible.com/ansible/latest/modules/yum_repository_module.html
 
-limiting password logins to console:
-https://serverfault.com/questions/406839/only-allow-password-authentication-to-ssh-server-from-internal-network
+Current plan:
+3. NTP auf rubix und kubes
+4. Rubix cron-job that runs ansible on itself -> auto update + update centos mirror
+5. Kubes auto-updates (? but what if it breaks them ? cron timer that only updates if other responds?)
