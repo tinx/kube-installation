@@ -1,0 +1,57 @@
+---
+- name: Create a raw partition spanning the whole disk
+  parted:
+    device: '{{ kube_storage_local_raw_device }}'
+    number: 1
+    state: present
+    label: gpt
+    name: LUKS
+    flags: [ raid ]
+
+- name: Install cryptsetup
+  package:
+    name: cryptsetup
+    state: present
+
+- name: Check if already a luks volume
+  shell: 'cryptsetup isLuks {{ kube_storage_local_raw_device }}1'
+  ignore_errors: yes
+  register: wasLuksVolume
+  failed_when: false
+  changed_when: false
+
+- name: Run cryptsetup luksFormat unless already a luks volume
+  shell: 'echo -n "ThisIsADemoPassphrase" | cryptsetup -c {{ kube_storage_local_luks_cipher }} luksFormat {{ kube_storage_local_raw_device }}1'
+  when: wasLuksVolume.rc != 0
+
+- name: Check if luksOpen has already been run, so the mapper device exists
+  shell: 'ls /dev/mapper/{{ kube_storage_local_crypted_devicename }}'
+  register: wasLuksOpen
+  failed_when: false
+  changed_when: false
+
+- name: Run cryptsetup luksOpen unless already opened
+  shell: 'echo -n "ThisIsADemoPassphrase" | cryptsetup luksOpen {{ kube_storage_local_raw_device }}1 {{ kube_storage_local_crypted_devicename }}'
+  when: wasLuksOpen.rc != 0
+
+- name: Install lvm2
+  package:
+    name: lvm2
+    state: present
+
+- name: Initialize "physical" volume for use by LVM
+  shell: 'pvcreate /dev/mapper/{{ kube_storage_local_crypted_devicename }}'
+  when: wasLuksVolume.rc != 0
+
+- name: Create volume group for our local storage
+  shell: 'vgcreate vg_storage /dev/mapper/{{ kube_storage_local_crypted_devicename }}'
+  when: wasLuksVolume.rc != 0
+
+- name: Create 3T lv for the ceph pool
+  shell: 'lvcreate -L 3072G vg_storage -n ceph'
+  when: wasLuksVolume.rc != 0
+
+- name: Create lv for remaining space (for local docker storage)
+  shell: 'lvcreate -l 100%FREE vg_storage -n local'
+  when: wasLuksVolume.rc != 0
+

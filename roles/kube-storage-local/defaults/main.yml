@@ -1,0 +1,2 @@
+---
+kube_storage_local_luks_cipher: aes-xts-plain64

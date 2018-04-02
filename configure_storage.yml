@@ -1,0 +1,13 @@
+---
+- name: Local storage basic setup
+  hosts: '{{ target|default("kube_nodes") }}'
+  remote_user: ansible
+  become: true
+  tags:
+   - crypt setup
+  tasks:
+    - include_role:
+        name: kube-storage-local
+      vars:
+        kube_storage_local_raw_device: /dev/sdb
+        kube_storage_local_crypted_devicename: crypted_sdb1

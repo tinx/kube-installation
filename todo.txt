@@ -29,6 +29,10 @@ To Do:
     - how long ago did the centos7 mirror script last run
     - are there new packages
 
+ - move var defaults into defaults/main.yml from code in roles
+
+ - for disk phrase, create a gpg'd file with 2 keys, that are signature responses from ssh-agent
+
  - disk setup plan:
     1. crypt
     2. lvm

@@ -6,3 +6,15 @@ kube1	ansible_host=192.168.200.41 external_ip=192.168.0.41 internal_ip=192.168.2
 kube2	ansible_host=192.168.200.42 external_ip=192.168.0.42 internal_ip=192.168.200.42 mac=70:85:c2:71:78:5e dhcp_tag=node
 kube3	ansible_host=192.168.200.43 external_ip=192.168.0.43 internal_ip=192.168.200.43 mac=70:85:c2:71:78:42 dhcp_tag=node
 
+# we need an odd number of storage monitors (usually 3 or 5)
+[kube_ceph_monitors]
+kube1
+kube2
+kube3
+
+# not all kube nodes will necessarily have ceph storage, but they will all have docker storage
+[kube_ceph_storage_nodes]
+kube1
+kube2
+kube3
+
