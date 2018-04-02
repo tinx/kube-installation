@@ -21,22 +21,21 @@ To Do:
 
  - after setting up the mirror, update yum cache
 
+ - run ntpdate during ansible run
+ - set hwclock
+ - set timezone local, hwclock utc
+
+ - monitoring
+    - how long ago did the centos7 mirror script last run
+    - are there new packages
+
  - disk setup plan:
     1. crypt
     2. lvm
     3. Ceph OSD
     4. CephFS
 
-https://ceph.com/install/
-https://public.centerdevice.de/d72fea90-0d1f-4f7d-8cf2-404603a94032 -- pdf article
-https://www.howtoforge.com/tutorial/how-to-build-a-ceph-cluster-on-centos-7/
-http://docs.ceph.com/docs/master/install/
-http://docs.ceph.com/docs/master/install/install-storage-cluster/
-
-https://wiki.centos.org/HowTos/CreateLocalMirror
- - see the last section on carrying only a subset of the repo (DVD + updates?)
- - also, http://docs.ansible.com/ansible/latest/modules/yum_repository_module.html
-
 Current plan:
-4. Rubix cron-job that runs auto update + update centos mirror
-5. Kubes auto-updates (? but what if it breaks them ? cron timer that only updates if other responds?)
+4a. update centos mirror
+4b. Rubix cron-job that runs auto update
+5. Kubes auto-updates (? but what if it breaks them ? cron timer that only updates if other responds?) at 03:00+

@@ -1,0 +1,29 @@
+CEPH:
+
+https://ceph.com/install/
+https://public.centerdevice.de/d72fea90-0d1f-4f7d-8cf2-404603a94032 -- pdf article
+https://www.howtoforge.com/tutorial/how-to-build-a-ceph-cluster-on-centos-7/
+http://docs.ceph.com/docs/master/install/
+http://docs.ceph.com/docs/master/install/install-storage-cluster/
+
+Centos Mirror:
+
+https://wiki.centos.org/HowTos/CreateLocalMirror
+ - see the last section on carrying only a subset of the repo (DVD + updates?)
+ - also, http://docs.ansible.com/ansible/latest/modules/yum_repository_module.html
+
+Capture rsync output:
+
+RSYNC_OUTPUT=$(rsync -irtS --no-motd --delete ...)
+if [ $? -eq 0 ]; then
+    if [ -n "${RSYNC_OUTPUT}" ]; then
+        # There were changes
+        exit 200
+    else
+        # No changes were made by rsync
+        exit 0
+    fi
+else
+    # Something went wrong!
+    exit 1
+fi

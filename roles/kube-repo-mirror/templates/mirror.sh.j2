@@ -1,0 +1,32 @@
+#! /bin/bash
+
+set -e
+
+JOBNAME="{{ kube_repo_mirror_jobname }}"
+
+LOCKFILE="/var/lock/mirror-$JOBNAME.lock"
+
+UPDATE_INDICATOR_FILE="/var/run/mirror-$JOBNAME.lastupdate"
+
+_lock() {
+  exec 99>"$LOCKFILE"
+  flock -xn 99
+}
+
+_unlock() {
+  # flock is automatically dropped when the file is closed
+  exec 99>&-
+}
+
+_lock
+
+rsync -qrtS --no-motd --delete \
+{% for rsync_exclude in kube_repo_mirror_excludes %}
+  --exclude "{{ rsync_exclude }}" \
+{% endfor %}
+  {{ kube_repo_mirror_source }} \
+  {{ kube_repo_mirror_target }}
+
+touch $UPDATE_INDICATOR_FILE
+
+_unlock

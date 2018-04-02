@@ -22,6 +22,11 @@ they share a vlan with the kube install host, rubix.
 
 Correspondingly, it assumes a very specific setup of your inventory. See inventory/kubernetes_nodes for details.
 
+Dependencies
+------------
+
+kube-repo-mirror
+
 Role Variables
 --------------
 

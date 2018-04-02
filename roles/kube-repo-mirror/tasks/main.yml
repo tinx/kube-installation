@@ -1,0 +1,23 @@
+---
+- name: Create directory for mirror scripts
+  file:
+    path: /opt/mirror
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Write mirror script
+  template:
+    src: mirror.sh.j2
+    dest: '/opt/mirror/mirror-{{ kube_repo_mirror_jobname }}.sh'
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create daily cron job
+  cron:
+    name: "repo mirror job {{ kube_repo_mirror_jobname }}"
+    hour: 02
+    minute: 10
+    job: '/opt/mirror/mirror-{{ kube_repo_mirror_jobname }}.sh'
