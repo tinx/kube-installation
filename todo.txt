@@ -38,6 +38,5 @@ https://wiki.centos.org/HowTos/CreateLocalMirror
  - also, http://docs.ansible.com/ansible/latest/modules/yum_repository_module.html
 
 Current plan:
-3. NTP auf rubix und kubes
 4. Rubix cron-job that runs auto update + update centos mirror
 5. Kubes auto-updates (? but what if it breaks them ? cron timer that only updates if other responds?)

@@ -16,6 +16,9 @@ kube_networks:
 
 kube_centos_version: 7.4.1708
 
+kube_ntp_servers:
+  - pool.ntp.org
+
 kube_crypted_ansible_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           61663330626262383935643638326133393036363861353936363965643938643133633432663563

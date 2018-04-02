@@ -1,0 +1,11 @@
+---
+- name: install ntpdate package
+  package:
+    name: ntpdate
+    state: present
+
+- name: create hourly cron job to run ntpdate
+  cron:
+    name: "time synchronization"
+    special_time: hourly
+    job: 'ntpdate -s {{ kube_ntp_client_ntp_servers|join(" ") }}'

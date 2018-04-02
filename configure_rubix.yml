@@ -60,3 +60,15 @@
         kube_boot_server_ssh_keys: '{{ kube_users|map(attribute="ssh_key")|list }}'
         kube_boot_server_centos_version: '{{ kube_centos_version }}'
 
+- name: Configure NTP client
+  hosts: kube_install_hosts
+  remote_user: ansible
+  become: true
+  tags:
+    - ntp_client_setup
+  tasks:
+    - name: Configure ntp client
+      include_role:
+        name: kube-ntp-client
+      vars:
+        kube_ntp_client_ntp_servers: '{{ kube_ntp_servers }}'

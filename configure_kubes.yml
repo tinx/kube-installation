@@ -43,3 +43,16 @@
       vars:
         kube_upgrade_packages_mirror_base_url: 'http://{{ hostvars["rubix"].internal_ip }}'
         kube_upgrade_packages_centos_version: '{{ kube_centos_version }}'
+
+- name: Configure NTP client
+  hosts: kube_nodes
+  remote_user: ansible
+  become: true
+  tags:
+    - ntp_client_setup
+  tasks:
+    - name: Configure ntp client
+      include_role:
+        name: kube-ntp-client
+      vars:
+        kube_ntp_client_ntp_servers: '{{ kube_ntp_servers }}'
