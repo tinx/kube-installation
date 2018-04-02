@@ -35,7 +35,16 @@ To Do:
     3. Ceph OSD
     4. CephFS
 
-Current plan:
-4a. update centos mirror
-4b. Rubix cron-job that runs auto update
-5. Kubes auto-updates (? but what if it breaks them ? cron timer that only updates if other responds?) at 03:00+
+ - kube auto-update needs to be orchestrated
+    - evacuate pods
+    - disable Ceph node (mark osds as "out")
+    - update
+    - potentially reboot (but how to get the passphrase?)
+    - enable Ceph node (mark osds as "in")
+    - ensure Ceph is healthy + synchronized
+    - health check for kubernetes
+
+ - refactor kubes ansible code to run on just one kube
+ - orchestrated re-install for multiple kubes
+
+ - generate /etc/hosts on all nodes, for times when rubix is down
