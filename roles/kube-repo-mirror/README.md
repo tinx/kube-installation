@@ -12,6 +12,7 @@ Role Variables
 * kube_repo_mirror_source
 * kube_repo_mirror_target
 * kube_repo_mirror_excludes - a list of excludes
+* kube_repo_mirror_skip_initial_run - set to true to skip initial mirroring run
 
 Example Playbook
 ----------------
