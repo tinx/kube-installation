@@ -1,0 +1,90 @@
+---
+#
+# see http://docs.ceph.com/docs/master/install/install-storage-cluster/
+#
+- name: Install yum-plugin-priorities
+  yum:
+    name: yum-plugin-priorities
+    state: present
+
+- name: ensure yum-plugin-priorities is enabled
+  ini_file:
+    path: /etc/yum/pluginconf.d/priorities.conf
+    section: main
+    option: enabled
+    value: 1
+    mode: 0644
+    backup: no
+
+- name: configure ceph repo
+  template:
+    src: ceph.repo.j2
+    dest: /etc/yum.repos.d/ceph.repo
+    owner: root
+    group: root
+    mode: 0644
+  vars:
+    distro: el7
+
+- name: configure epel repository
+  yum:
+    name: epel-release.noarch
+    state: present
+
+- name: install dependencies for ceph - snappy
+  yum:
+    name: snappy
+    state: present
+    update_cache: yes
+
+- name: install dependencies for ceph - leveldb
+  yum:
+    name: leveldb
+    state: present
+
+- name: install dependencies for ceph - gdisk
+  yum:
+    name: gdisk
+    state: present
+
+- name: install dependencies for ceph - python-argparse
+  yum:
+    name: python-argparse
+    state: present
+
+- name: install dependencies for ceph - gperftools-libs
+  yum:
+    name: gperftools-libs
+    state: present
+
+- name: install ceph
+  yum:
+    name: ceph
+    state: present
+
+- name: render ceph configuration file
+  template:
+    src: ceph.conf.j2
+    dest: /etc/ceph/ceph.conf
+    owner: root
+    group: root
+    mode: 0644
+
+# todo - place keyrings on rubix, before generating try getting them from there
+# todo - this will not work with more than one node, they all need the same keyrings
+- name: render keyring generation script
+  template:
+    src: ceph-generate-keyrings.sh.j2
+    dest: /root/ceph-generate-keyrings.sh
+    owner: root
+    group: root
+    mode: 0700
+
+- name: render monitor installation script
+  template:
+    src: ceph-configure-monitor.sh.j2
+    dest: /root/ceph-configure-monitor.sh
+    owner: root
+    group: root
+    mode: 0700
+

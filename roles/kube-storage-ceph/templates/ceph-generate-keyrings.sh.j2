@@ -1,0 +1,21 @@
+#! /bin/bash
+
+set -e
+
+# see http://docs.ceph.com/docs/master/install/manual-deployment/
+
+# Create a keyring for your cluster and generate a monitor secret key
+ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key \
+  -n mon. --cap mon 'allow *'
+
+# Generate an administrator keyring, generate a client.admin user and add the user to the keyring.
+ceph-authtool --create-keyring /tmp/ceph.client.admin.keyring --gen-key \
+  -n client.admin --set-uid=0 --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow *' --cap mgr 'allow *'
+
+# Generate a bootstrap-osd keyring, generate a client.bootstrap-osd user and add the user to the keyring.
+ceph-authtool --create-keyring /tmp/ceph.client.bootstrap-osd.keyring --gen-key \
+  -n client.bootstrap-osd --cap mon 'profile bootstrap-osd'
+
+# Add the generated keys to the ceph.mon.keyring.
+sudo ceph-authtool /tmp/ceph.mon.keyring --import-keyring /tmp/ceph.client.admin.keyring
+sudo ceph-authtool /tmp/ceph.mon.keyring --import-keyring /tmp/ceph.client.bootstrap-osd.keyring
