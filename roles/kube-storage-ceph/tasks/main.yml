@@ -70,20 +70,18 @@
     group: root
     mode: 0644
 
-# todo - place keyrings on rubix, before generating try getting them from there
-# todo - this will not work with more than one node, they all need the same keyrings
-- name: render keyring generation script
-  template:
-    src: ceph-generate-keyrings.sh.j2
-    dest: /root/ceph-generate-keyrings.sh
+- name: create directory under /root for keyring generation
+  file:
+    path: /root/ceph-scripts
+    state: directory
     owner: root
     group: root
     mode: 0700
 
-- name: render monitor installation script
+- name: render keyring generation script
   template:
-    src: ceph-configure-monitor.sh.j2
-    dest: /root/ceph-configure-monitor.sh
+    src: ceph-generate-keyrings.sh.j2
+    dest: '{{ kube_storage_ceph_scriptdir }}/ceph-generate-keyrings.sh'
     owner: root
     group: root
     mode: 0700

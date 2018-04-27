@@ -24,8 +24,9 @@
       vars:
         # de mirror is hopelessly outdated
         kube_storage_ceph_repo_baseurl: https://download.ceph.com
-        # even major versions are LTS, x.2.z is stable, February 2018: 12.2.4
+        # even major version numbers are LTS, x.2.z is stable, February 2018: 12.2.4
         kube_storage_ceph_version: 12.2.4
         kube_storage_ceph_release: luminous
         kube_storage_ceph_cluster_uuid: 5096bb41-0eb6-4eb0-80bd-a476e9b39caa
         kube_storage_ceph_cluster_name: ceph
+        kube_storage_ceph_scriptdir: /root/ceph-scripts
