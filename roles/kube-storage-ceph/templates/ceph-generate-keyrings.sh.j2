@@ -2,6 +2,8 @@
 
 set -e
 
+# see http://docs.ceph.com/docs/master/install/manual-deployment/
+
 # Create a keyring for your cluster and generate a monitor secret key
 ceph-authtool --create-keyring {{ kube_storage_ceph_scriptdir }}/ceph.mon.keyring --gen-key \
   -n mon. --cap mon 'allow *'
@@ -19,3 +21,13 @@ ceph-authtool {{ kube_storage_ceph_scriptdir }}/ceph.mon.keyring \
   --import-keyring {{ kube_storage_ceph_scriptdir }}/ceph.client.admin.keyring
 ceph-authtool {{ kube_storage_ceph_scriptdir }}/ceph.mon.keyring \
   --import-keyring {{ kube_storage_ceph_scriptdir }}/ceph.client.bootstrap-osd.keyring
+
+# move the finished keyrings to their final places and set correct permissions so we can use monmaptool
+# (ceph.mon.keyring stays for now, it will be handled in ceph-configure-monitor.sh)
+
+mv {{ kube_storage_ceph_scriptdir }}/ceph.client.admin.keyring /etc/ceph/ceph.client.admin.keyring
+
+mv {{ kube_storage_ceph_scriptdir }}/ceph.client.bootstrap-osd.keyring /var/lib/ceph/bootstrap-osd/ceph.keyring
+chown ceph.ceph /var/lib/ceph/bootstrap-osd/ceph.keyring
+
+touch {{ kube_storage_ceph_flagdir }}/ceph.keyrings.present

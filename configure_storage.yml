@@ -30,3 +30,4 @@
         kube_storage_ceph_cluster_uuid: 5096bb41-0eb6-4eb0-80bd-a476e9b39caa
         kube_storage_ceph_cluster_name: ceph
         kube_storage_ceph_scriptdir: /root/ceph-scripts
+        kube_storage_ceph_flagdir: /var/run/ceph-ansible
