@@ -11,12 +11,14 @@
     kube_net_primary_netmask: '{{ kube_networks.internal.netmask }}'
     kube_net_primary_network: '{{ kube_networks.internal.network }}'
     kube_net_primary_broadcast: '{{ kube_networks.internal.broadcast }}'
+    kube_net_primary_zone: trusted
     kube_net_secondary_vlan: 1
     kube_net_secondary_ip: '{{ external_ip }}'
     kube_net_secondary_netmask: '{{ kube_networks.external.netmask }}'
     kube_net_secondary_network: '{{ kube_networks.external.network }}'
     kube_net_secondary_broadcast: '{{ kube_networks.external.broadcast }}'
     kube_net_secondary_gateway: '{{ kube_networks.external.gateway }}'
+    kube_net_secondary_zone: public
 - name: Configure static dns resolver
   include_role:
     name: kube-net-static-dns-resolver

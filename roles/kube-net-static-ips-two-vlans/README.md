@@ -26,12 +26,14 @@ Role Variables
 * kube_net_primary_network
 * kube_net_primary_broadcast
 * kube_net_primary_gateway - optional, only set if your gateway is on the primary vlan
+* kube_net_primary_zone - optional, fixes firewalld zone after reboot problem 
 * kube_net_secondary_vlan - the vlan number used for the secondary interface, e.g. 200
 * kube_net_secondary_ip
 * kube_net_secondary_netmask
 * kube_net_secondary_network
 * kube_net_secondary_broadcast
 * kube_net_secondary_gateway - optional, only set if your gateway is on the secondary vlan
+* kube_net_secondary_zone - optional, fixes firewalld zone after reboot problem 
 
 You should probably only set one of the two "gateway" variables.
 
@@ -51,11 +53,13 @@ Example Playbook
             kube_net_primary_network: 192.168.0.0
             kube_net_primary_broadcast: 192.168.0.255
             kube_net_primary_gateway: 192.168.0.8
+            kube_net_primary_zone: public
             kube_net_secondary_vlan: 200
             kube_net_secondary_ip: 192.168.200.40
             kube_net_secondary_netmask: 255.255.255.0
             kube_net_secondary_network: 192.168.200.0
             kube_net_secondary_broadcast: 192.168.200.255
+            kube_net_secondary_zone: trusted
 
 License
 -------

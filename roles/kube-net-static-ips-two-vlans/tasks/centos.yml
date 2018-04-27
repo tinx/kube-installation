@@ -26,3 +26,19 @@
     owner: root
     group: root
     mode: 0644
+- name: Configure firewalld zone for primary interface
+  firewalld:
+    zone: '{{ kube_net_primary_zone }}'
+    interface: '{{ kube_net_interface }}'
+    permanent: true
+    immediate: yes
+    state: enabled
+  when: kube_net_primary_zone is defined
+- name: Configure firewalld zone for secondary interface
+  firewalld:
+    zone: '{{ kube_net_secondary_zone }}'
+    interface: '{{ kube_net_interface }}.{{ kube_net_secondary_vlan }}'
+    permanent: true
+    immediate: yes
+    state: enabled
+  when: kube_net_secondary_zone is defined

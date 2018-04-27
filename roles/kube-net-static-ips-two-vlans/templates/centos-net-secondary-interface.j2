@@ -11,3 +11,5 @@ BROADCAST={{ kube_net_secondary_broadcast }}
 {% if kube_net_secondary_gateway is defined %}GATEWAY={{ kube_net_secondary_gateway }}
 DEFROUTE=yes
 {% endif %}
+{% if kube_net_secondary_zone is defined %}ZONE={{ kube_net_secondary_zone }}
+{% endif %}
