@@ -42,9 +42,9 @@
 
 - name: Download CentOS ISO
   get_url:
-    url: http://mirror.eu.oneandone.net/linux/distributions/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso
-    dest: /var/www/html/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso
-    checksum: 'sha256:bba314624956961a2ea31dd460cd860a77911c1e0a56e4820a12b9c5dad363f5'
+    url: '{{ kube_boot_centos_iso_download_url_path }}{{ kube_boot_centos_iso_filename }}'
+    dest: '/var/www/html/centos/7/isos/x86_64/{{ kube_boot_centos_iso_filename }}'
+    checksum: '{{ kube_boot_centos_iso_checksum }}'
     owner: root
     group: root
     mode: 0644
@@ -52,7 +52,7 @@
 - name: Mount CentOS ISO
   mount:
     path: /var/www/html/pxe/centos
-    src: /var/www/html/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso
+    src: '/var/www/html/centos/7/isos/x86_64/{{ kube_boot_centos_iso_filename }}'
     opts: ro,loop
     fstype: auto
     state: mounted

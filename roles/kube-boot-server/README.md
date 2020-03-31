@@ -49,6 +49,10 @@ Example Playbook
             kube_boot_server_ssh_keys:
                 - ssh_key_1
                 - ssh_key_2
+            kube_boot_server_centos_version: '7.7.1908'
+            kube_boot_centos_iso_download_url_path: 'http://mirror.eu.oneandone.net/linux/distributions/centos/7/isos/x86_64/'
+            kube_boot_centos_iso_filename: 'CentOS-7-x86_64-Minimal-1908.iso'
+            kube_boot_centos_iso_checksum: 'sha256:9a2c47d97b9975452f7d582264e9fc16d108ed8252ac6816239a3b58cef5c53d'
 
 License
 -------
