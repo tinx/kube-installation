@@ -7,19 +7,4 @@
     owner: dnsmasq
     group: root
     mode: 0644
-  with_items:
-    - url: 'http://mirror.centos.org/centos/{{ kube_boot_server_centos_version }}/os/x86_64/EFI/BOOT/BOOTX64.EFI'
-      filename: bootx64.efi
-      checksum: 'sha256:1e6d991a38fe71485597585f2a1f6424bae20a8610c23668398cacc72602fd90'
-    - url: 'http://mirror.centos.org/centos/{{ kube_boot_server_centos_version }}/os/x86_64/EFI/BOOT/grubx64.efi'
-      filename: grubx64.efi
-      checksum: 'sha256:9656b796ad1bbd4321285c34d8e3203cc4bb45bda64c1aabc676389b6f042e7a'
-    - url: 'http://mirror.centos.org/centos/{{ kube_boot_server_centos_version }}/os/x86_64/images/efiboot.img'
-      filename: efiboot.img
-      checksum: 'sha256:78a4c33b2920471d8b21bb4b9ba4c5db8d8a2b9bf108871f8cb08b5cb6fe5801'
-    - url: 'http://mirror.centos.org/centos/{{ kube_boot_server_centos_version }}/os/x86_64/images/pxeboot/initrd.img'
-      filename: pxeboot/initrd.img
-      checksum: 'sha256:5c71c0494620325c1ee919b44ac4ed4518fb43443bbf0474ff75951ea140c89c'
-    - url: 'http://mirror.centos.org/centos/{{ kube_boot_server_centos_version }}/os/x86_64/images/pxeboot/vmlinuz'
-      filename: pxeboot/vmlinuz
-      checksum: 'sha256:8ede7f8d3c8f5e72f1a84713ad59b7b39211ea1af8887389cb50a189df937c6f'
+  with_items: "{{ kube_boot_server_pxe_files }}"

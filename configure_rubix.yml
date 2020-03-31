@@ -62,6 +62,7 @@
         kube_boot_centos_iso_download_url_path: '{{ kube_centos_iso_download_url_path }}'
         kube_boot_centos_iso_filename: '{{ kube_centos_iso_filename }}'
         kube_boot_centos_iso_checksum: '{{ kube_centos_iso_checksum }}'
+        kube_boot_server_pxe_files: "{{ kube_centos_pxe_files }}"
 
 - name: Configure NTP client
   hosts: kube_install_hosts

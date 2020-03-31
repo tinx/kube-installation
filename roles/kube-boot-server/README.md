@@ -53,6 +53,22 @@ Example Playbook
             kube_boot_centos_iso_download_url_path: 'http://mirror.eu.oneandone.net/linux/distributions/centos/7/isos/x86_64/'
             kube_boot_centos_iso_filename: 'CentOS-7-x86_64-Minimal-1908.iso'
             kube_boot_centos_iso_checksum: 'sha256:9a2c47d97b9975452f7d582264e9fc16d108ed8252ac6816239a3b58cef5c53d'
+            kube_boot_server_pxe_files:
+              - url: 'http://mirror.centos.org/centos/7.7.1908/os/x86_64/EFI/BOOT/BOOTX64.EFI'
+                filename: bootx64.efi
+                checksum: 'sha256:62c6affbee1ba9a0435562db6e092a5018effeed0bd0f1d0494f34ce6cd403e9'
+              - url: 'http://mirror.centos.org/centos/7.7.1908/os/x86_64/EFI/BOOT/grubx64.efi'
+                filename: grubx64.efi
+                checksum: 'sha256:90008a4584a1afe1f7ee6ecba463b48a50911f792512c54f8fa9c5f06e40f383'
+              - url: 'http://mirror.centos.org/centos/7.7.1908/os/x86_64/images/efiboot.img'
+                filename: efiboot.img
+                checksum: 'sha256:568b80e3bdbc6dd8652c1a7cbd039bc3736a0ecf35f042c383338ab487310785'
+              - url: 'http://mirror.centos.org/centos/7.7.1908/os/x86_64/images/pxeboot/initrd.img'
+                filename: pxeboot/initrd.img
+                checksum: 'sha256:8c97a6f32ae8ab59425bdff8321eb8d99827313fb51e5498e2fcb438befa3d83'
+              - url: 'http://mirror.centos.org/centos/7.7.1908/os/x86_64/images/pxeboot/vmlinuz'
+                filename: pxeboot/vmlinuz
+                checksum: 'sha256:156ddeaccea0ee51eb9af42b2551f393f84d6adaf7d257fa5b174657d38cead6'
 
 License
 -------
