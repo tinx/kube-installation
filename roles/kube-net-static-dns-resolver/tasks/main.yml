@@ -1,5 +1,5 @@
 ---
-- name: Annouce nameserver to resolvconf
+- name: Announce nameserver to resolvconf
   lineinfile:
     path: /etc/resolvconf.conf
     regexp: '^(# |#)?name_servers='
