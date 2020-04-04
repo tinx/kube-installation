@@ -4,8 +4,16 @@
     name: ntpdate
     state: present
 
-- name: create hourly cron job to run ntpdate
+- name: create hourly cron job to run ntpdate (CentOS version)
   cron:
     name: "time synchronization"
     special_time: hourly
-    job: 'ntpdate -s {{ kube_ntp_client_ntp_servers|join(" ") }}'
+    job: '/sbin/ntpdate -s {{ kube_ntp_client_ntp_servers|join(" ") }}'
+  when: ansible_os_family == "RedHat"
+
+- name: create hourly cron job to run ntpdate (Debian version)
+  cron:
+    name: "time synchronization"
+    special_time: hourly
+    job: '/usr/sbin/ntpdate -s {{ kube_ntp_client_ntp_servers|join(" ") }}'
+  when: ansible_os_family == "Debian"
