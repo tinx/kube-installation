@@ -1,0 +1,36 @@
+#! /bin/bash
+
+# provided by ansible via role kube-storage-cryptolayer
+
+PARTITION="{{ kube_storage_local_raw_device }}1"
+CRYPTED_DEVICE="{{ kube_storage_local_crypted_devicename }}"
+CIPHER="{{ kube_storage_local_luks_cipher }}"
+
+read -r PASSPHRASE
+
+echo "checking if $PARTITION is a formatted crypto volume..."
+cryptsetup isLuks "$PARTITION"
+if [ $? != 0 ]; then
+  echo "Needs formatting..."
+  echo -n "$PASSPHRASE" | cryptsetup -c "$CIPHER" luksFormat "$PARTITION"
+
+  if [ $? != 0 ]; then
+    echo "ERROR running cryptsetup luksFormat - exiting with exit code 1"
+    exit 1
+  fi
+fi
+
+echo "checking if $PARTITION is opened..."
+ls "/dev/mapper/$CRYPTED_DEVICE"
+if [ $? != 0 ]; then
+  echo "Needs opening..."
+  echo -n "$PASSPHRASE" | cryptsetup luksOpen "$PARTITION" "$CRYPTED_DEVICE"
+
+  if [ $? != 0 ]; then
+    echo "ERROR running cryptsetup luksOpen - exiting with exit code 2"
+    exit 2
+  fi
+fi
+
+echo "Success"
+exit 0

@@ -13,6 +13,14 @@
     name: cryptsetup
     state: present
 
+- name: Render mount script
+  template:
+    src: setup-cryptolayer.sh.j2
+    dest: /root/setup-cryptolayer.sh
+    owner: root
+    group: root
+    mode: 0700
+
 - name: Check if already a luks volume
   shell: 'cryptsetup isLuks {{ kube_storage_local_raw_device }}1'
   ignore_errors: yes
@@ -20,24 +28,39 @@
   failed_when: false
   changed_when: false
 
-- name: Run cryptsetup luksFormat unless already a luks volume
-  shell: 'echo -n "ThisIsADemoPassphrase" | cryptsetup -c {{ kube_storage_local_luks_cipher }} luksFormat {{ kube_storage_local_raw_device }}1'
-  when: wasLuksVolume.rc != 0
-
 - name: Check if luksOpen has already been run, so the mapper device exists
   shell: 'ls /dev/mapper/{{ kube_storage_local_crypted_devicename }}'
   register: wasLuksOpen
   failed_when: false
   changed_when: false
 
-- name: Run cryptsetup luksOpen unless already opened
-  shell: 'echo -n "ThisIsADemoPassphrase" | cryptsetup luksOpen {{ kube_storage_local_raw_device }}1 {{ kube_storage_local_crypted_devicename }}'
-  when: wasLuksOpen.rc != 0
+# if either of the two tests failed, use the rendered script to create and/or open the crypto volume
+- name: Run cryptsetup luksFormat unless already a luks volume
+  become: false
+  local_action:
+    module: shell
+    cmd: 'ssh {{ ansible_ssh_common_args }} ansible@{{ ansible_hostname }} "sudo /root/setup-cryptolayer.sh"'
+    stdin: '{{ kube_storage_passphrase }}'
+    stdin_add_newline: no
+  register: cryptSetupOutput
+  when: (wasLuksVolume.rc != 0) or (wasLuksOpen.rc != 0)
+
+# - debug: var=cryptSetupOutput
+
+- name: Verify that device is now a valid luks volume
+  shell: 'cryptsetup isLuks {{ kube_storage_local_raw_device }}1'
+  changed_when: false
+
+- name: Verify that luksOpen has now been run, so the mapper device exists
+  shell: 'ls /dev/mapper/{{ kube_storage_local_crypted_devicename }}'
+  changed_when: false
 
 - name: Install lvm2
   package:
     name: lvm2
     state: present
+
+# if we have newly created the luks volume above, we now need to partition it using LVM
 
 - name: Initialize "physical" volume for use by LVM
   shell: 'pvcreate /dev/mapper/{{ kube_storage_local_crypted_devicename }}'
@@ -47,8 +70,8 @@
   shell: 'vgcreate vg_storage /dev/mapper/{{ kube_storage_local_crypted_devicename }}'
   when: wasLuksVolume.rc != 0
 
-- name: Create 3T lv for the ceph pool
-  shell: 'lvcreate -L 3072G vg_storage -n ceph'
+- name: Create 2T lv for the ceph pool
+  shell: 'lvcreate -L 2048G vg_storage -n ceph'
   when: wasLuksVolume.rc != 0
 
 - name: Create lv for remaining space (for local docker storage)

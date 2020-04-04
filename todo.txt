@@ -4,7 +4,6 @@ To Do:
  - configure repos for nodes to use rubix as a repo source
    - avoid installing internet surprise updates
    - don't forget to adjust kickstart file
- - re-mount ISO handler if download received a new file
  - preserve ssh hostkeys for nodes and rubix
 
  - if we install postfix, we may need to change its /etc/postfix/main.cf to say
@@ -31,13 +30,11 @@ To Do:
 
  - move var defaults into defaults/main.yml from code in roles
 
- - for disk phrase, create a gpg'd file with 2 keys, that are signature responses from ssh-agent
-
  - disk setup plan:
     1. crypt
     2. lvm
-    3. Ceph OSD
-    4. CephFS
+    # 3. Ceph OSD
+    # 4. CephFS
 
  - kube auto-update needs to be orchestrated
     - evacuate pods

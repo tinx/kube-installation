@@ -1,13 +1,16 @@
 ---
 - name: Local storage basic setup
-  hosts: '{{ target|default("kube_ceph_storage_nodes") }}'
+  hosts: kube_nodes
   remote_user: ansible
   become: true
   tags:
    - crypt_setup
+  vars_prompt:
+    - name: kube_storage_passphrase
+      prompt: "Enter Disk Passphrase"
   tasks:
     - include_role:
-        name: kube-storage-local
+        name: kube-storage-cryptolayer
       vars:
         kube_storage_local_raw_device: /dev/sdb
         kube_storage_local_crypted_devicename: crypted_sdb1

@@ -1,5 +1,5 @@
-kube-storage-local
-==================
+kube-storage-cryptolayer
+========================
 
 - luks setup
 - lvm?
@@ -27,7 +27,7 @@ Example Playbook
       tasks:
         - name: Configure luks storage
           include_role:
-            name: kube-storage-local
+            name: kube-storage-cryptolayer
           vars:
             kube_storage_local_raw_device: /dev/sdb
             kube_storage_local_crypted_devicename: crypted_sdb1
