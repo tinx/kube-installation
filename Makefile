@@ -17,6 +17,9 @@ init-rubix:
 rubix:
 	ansible-playbook configure_rubix.yml -i inventory/kubernetes_nodes --ask-vault-pass
 
+rubix-apache-only:
+	ansible-playbook configure_rubix.yml -i inventory/kubernetes_nodes --tags "pxe_setup" --skip-tags "kube_boot_server_dnsmasq,kube_boot_server_download_centos_pxe" --ask-vault-pass
+
 kube1:
 	ansible-playbook configure_kubes.yml -i inventory/kubernetes_nodes --extra-vars "target=kube1" --ask-vault-pass
 

@@ -31,6 +31,9 @@
     - '/var/www/html/centos/{{ kube_boot_server_centos_version }}'
     - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates'
     - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates/x86_64'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/os'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/os/x86_64'
 
 - name: Render kickstart config file
   template:
@@ -57,7 +60,36 @@
     fstype: auto
     state: mounted
 
-- name: Mirror CentOS updates
+- name: Check If Remount Necessary
+  # grep has rc 0 if a match was found, 1 if not
+  shell: 'mount | grep "/var/www/html/centos/7/isos/x86_64/{{ kube_boot_centos_iso_filename }} on /var/www/html/pxe/centos"'
+  args:
+    warn: no
+  ignore_errors: yes
+  register: isoIsMountedCorrectly
+  failed_when: false
+  changed_when: false
+
+- name: Trigger Remount Handler
+  command: /bin/true
+  when: isoIsMountedCorrectly.rc != 0
+  notify: remount centos iso
+
+- name: Mirror CentOS os Repo
+  include_role:
+    name: kube-repo-mirror
+  vars:
+    kube_repo_mirror_jobname: centos7-os
+    kube_repo_mirror_source: 'rsync://mirror.eu.oneandone.net/centos/{{ kube_boot_server_centos_version }}/os/x86_64/'
+    kube_repo_mirror_target: '/var/www/html/centos/{{ kube_boot_server_centos_version }}/os/x86_64/'
+    kube_repo_mirror_excludes:
+      - 'drpms/'
+      - 'EFI/'
+      - 'LiveOS/'
+      - 'images/'
+      - 'isolinux/'
+
+- name: Mirror CentOS updates Repo
   include_role:
     name: kube-repo-mirror
   vars:

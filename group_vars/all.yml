@@ -16,8 +16,8 @@ kube_networks:
 
 kube_centos_version: 7.7.1908
 kube_centos_iso_download_url_path: 'http://mirror.eu.oneandone.net/linux/distributions/centos/7/isos/x86_64/'
-kube_centos_iso_filename: 'CentOS-7-x86_64-Everything-1908.iso'
-kube_centos_iso_checksum: 'sha256:bd5e6ca18386e8a8e0b5a9e906297b5610095e375e4d02342f07f32022b13acf'
+kube_centos_iso_filename: 'CentOS-7-x86_64-Minimal-1908.iso'
+kube_centos_iso_checksum: 'sha256:9a2c47d97b9975452f7d582264e9fc16d108ed8252ac6816239a3b58cef5c53d'
 kube_centos_pxe_files:
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/EFI/BOOT/BOOTX64.EFI'
     filename: bootx64.efi

@@ -4,8 +4,27 @@
     name: dnsmasq
     state: restarted
   listen: restart dnsmasq
+
 - name: restart apache2
   service:
     name: apache2
     state: restarted
   listen: restart apache2
+
+# two handlers listening on the same subject will run in sequence
+- name: unmount centos iso
+  mount:
+    path: /var/www/html/pxe/centos
+    src: '/var/www/html/centos/7/isos/x86_64/{{ kube_boot_centos_iso_filename }}'
+    opts: ro,loop
+    fstype: auto
+    state: unmounted
+  listen: remount centos iso
+- name: mount centos iso
+  mount:
+    path: /var/www/html/pxe/centos
+    src: '/var/www/html/centos/7/isos/x86_64/{{ kube_boot_centos_iso_filename }}'
+    opts: ro,loop
+    fstype: auto
+    state: mounted
+  listen: remount centos iso
