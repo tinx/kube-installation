@@ -19,7 +19,7 @@ set timeout=6
 search --no-floppy --set=root -l 'CentOS 7 x86_64'
 
 menuentry 'PXE Install CentOS 7' --class fedora --class gnu-linux --class gnu --class os {
-        linuxefi /pxeboot/vmlinuz inst.repo=http://{{ hostvars["rubix"].internal_ip }}/pxe/centos/ ksdevice=bootif load_ramdisk=1 network ks=http://{{ hostvars["rubix"].internal_ip }}/kickstart/generic.ks
+        linuxefi /pxeboot/vmlinuz inst.repo=http://{{ hostvars["rubix"].internal_ip }}/pxe/centos/ ksdevice=bootif load_ramdisk=1 network ks=http://{{ hostvars["rubix"].internal_ip }}/kickstart/{{ kickstart_file }}
         initrdefi /pxeboot/initrd.img
 }
 

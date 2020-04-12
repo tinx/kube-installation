@@ -1,3 +1,6 @@
 **/*.retry
 **/*.swp
 .idea/**
+tmp
+group_vars/kube_sensitive_info.yml
+

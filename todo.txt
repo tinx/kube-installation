@@ -4,8 +4,6 @@ To Do:
  - configure repos for nodes to use rubix as a repo source
    - avoid installing internet surprise updates
    - don't forget to adjust kickstart file
- - preserve ssh hostkeys for nodes and rubix
-
  - if we install postfix, we may need to change its /etc/postfix/main.cf to say
   inet_interfaces = 127.0.0.1
   instead of

@@ -62,6 +62,22 @@ cat <<EOF >/home/ansible/.ssh/authorized_keys
 EOF
 chmod 600 /home/ansible/.ssh/authorized_keys
 chown ansible:ansible /home/ansible/.ssh/authorized_keys
+# write ssh host private keys
+{% for algorithm in priv_keys.keys() %}
+cat <<EOF >/etc/ssh/ssh_host_{{ algorithm }}_key
+{{ priv_keys[algorithm] | regex_replace('\n$', '') }}
+EOF
+chmod 640 /etc/ssh/ssh_host_{{ algorithm }}_key
+chown root:ssh_keys /etc/ssh/ssh_host_{{ algorithm }}_key
+{% endfor %}
+# write ssh host public keys
+{% for algorithm in pub_keys.keys() %}
+cat <<EOF >/etc/ssh/ssh_host_{{ algorithm }}_key.pub
+{{ pub_keys[algorithm] | regex_replace('\n$', '') }}
+EOF
+chmod 644 /etc/ssh/ssh_host_{{ algorithm }}_key.pub
+chown root:root /etc/ssh/ssh_host_{{ algorithm }}_key.pub
+{% endfor %}
 # enable password-less sudo
 echo "ansible ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/010_ansible-nopasswd
 # fix selinux context

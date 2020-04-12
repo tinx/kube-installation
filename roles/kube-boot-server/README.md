@@ -32,6 +32,7 @@ Role Variables
 
 * kube_boot_server_centos_version - the full version number of the ISO and pxe files to provide (e.g. "7.4.1708")
 * kube_boot_server_ssh_keys - a list of ssh public keys to add to the authorized_keys of the "ansible" account on installed nodes
+* kube_boot_server_shh_host_keys - a data structure specifying    
 
 Note: also see the Requirements section.
 
@@ -69,6 +70,24 @@ Example Playbook
               - url: 'http://mirror.centos.org/centos/7.7.1908/os/x86_64/images/pxeboot/vmlinuz'
                 filename: pxeboot/vmlinuz
                 checksum: 'sha256:156ddeaccea0ee51eb9af42b2551f393f84d6adaf7d257fa5b174657d38cead6'
+            kube_boot_server_ssh_host_keys:
+              '192.168.200.41':
+                ssh_public_keys:
+                  rsa: !vault |
+                    ...
+                  ecdsa: !vault |
+                    ...
+                  ed25519: !vault |
+                    ...
+                ssh_private_keys:
+                  rsa: !vault |
+                    ...
+                  ecdsa: !vault |
+                    ...
+                  ed25519: !vault |
+                    ...
+              '192.168.200.42':
+                ...
 
 License
 -------

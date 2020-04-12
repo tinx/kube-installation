@@ -8,3 +8,21 @@
     group: root
     mode: 0644
   with_items: "{{ kube_boot_server_pxe_files }}"
+
+- name: Create pxeboot directory in ip specific directories
+  file:
+    name: '/opt/dnsmasq/tftp/{{ item }}/pxeboot'
+    owner: dnsmasq
+    group: root
+    state: directory
+  with_items:
+    - '{{ kube_boot_server_ssh_host_keys.keys() }}'
+
+- name: Symlink PXE boot files in ip specific directories
+  file:
+    src: '/opt/dnsmasq/tftp/{{ item[0].filename }}'
+    dest: '/opt/dnsmasq/tftp/{{ item[1] }}/{{ item[0].filename }}'
+    state: link
+  with_nested:
+    - "{{ kube_boot_server_pxe_files }}"
+    - '{{ kube_boot_server_ssh_host_keys.keys() }}'

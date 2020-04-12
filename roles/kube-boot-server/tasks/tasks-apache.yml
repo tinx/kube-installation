@@ -37,11 +37,27 @@
 
 - name: Render kickstart config file
   template:
-    src: rubix-kickstart-generic.j2
+    src: rubix-kickstart.j2
     dest: /var/www/html/kickstart/generic.ks
     owner: root
     group: root
     mode: 0444
+  vars:
+    priv_keys: {}
+    pub_keys: {}
+- name: Render specific kickstart config file for any host ip with pinned ssh host keys
+  template:
+    src: rubix-kickstart.j2
+    dest: "/var/www/html/kickstart/kickstart-{{ item.key }}.ks"
+    owner: root
+    group: root
+    mode: 0444
+  vars:
+    priv_keys: "{{ item.value['ssh_private_keys'] }}"
+    pub_keys: "{{ item.value['ssh_public_keys'] }}"
+  with_dict: '{{ kube_boot_server_ssh_host_keys }}'
+  loop_control:
+    label: "{{ item.key }}"
 
 - name: Download CentOS ISO
   get_url:
