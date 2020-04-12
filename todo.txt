@@ -1,6 +1,8 @@
 To Do:
 
  - add reboot + wait after package changes
+    - public network only available after reboot, so probably add a reboot handler
+      to trigger a reboot if public network is not up at the end of the make kubes run
  - configure repos for nodes to use rubix as a repo source
    - avoid installing internet surprise updates
    - don't forget to adjust kickstart file

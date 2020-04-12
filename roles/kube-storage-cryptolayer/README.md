@@ -31,6 +31,7 @@ Example Playbook
           vars:
             kube_storage_local_raw_device: /dev/sdb
             kube_storage_local_crypted_devicename: crypted_sdb1
+            kube_storage_passphrase: 'This is not the passphrase'
 
 License
 -------

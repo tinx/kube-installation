@@ -5,9 +5,6 @@
   become: true
   tags:
    - crypt_setup
-  vars_prompt:
-    - name: kube_storage_passphrase
-      prompt: "Enter Disk Passphrase"
   tasks:
     - include_role:
         name: kube-storage-cryptolayer
