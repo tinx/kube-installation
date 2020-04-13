@@ -20,6 +20,9 @@ rubix:
 rubix-apache-only:
 	ansible-playbook configure_rubix.yml -i inventory/kubernetes_nodes --tags "pxe_setup" --skip-tags "kube_boot_server_dnsmasq,kube_boot_server_download_centos_pxe" --ask-vault-pass
 
+rubix-kubespray-only:
+	ansible-playbook configure_rubix.yml -i inventory/kubernetes_nodes --tags "prepare_kubespray" --ask-vault-pass
+
 kube1:
 	ansible-playbook configure_kubes.yml -i inventory/kubernetes_nodes --limit "kube1" --ask-vault-pass
 

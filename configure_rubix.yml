@@ -77,3 +77,18 @@
         name: kube-ntp-client
       vars:
         kube_ntp_client_ntp_servers: '{{ kube_ntp_servers }}'
+
+- name: Prepare kubespray
+  hosts: kube_install_hosts
+  remote_user: ansible
+  become: true
+  tags:
+    - prepare_kubespray
+  tasks:
+    - name: Clone and configure kubespray
+      include_role:
+        name: kube-prepare-kubespray
+      vars:
+        kube_prepare_kubespray_repodir: '/home/ansible/kubespray'
+        kube_prepare_kubespray_giturl: 'https://github.com/kubernetes-sigs/kubespray'
+

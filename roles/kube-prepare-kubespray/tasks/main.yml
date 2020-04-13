@@ -1,0 +1,61 @@
+---
+- name: install git
+  package:
+    name: git
+    state: present
+
+- name: install screen
+  package:
+    name: screen
+    state: present
+
+- name: install python3-pip
+  package:
+    name: python3-pip
+    state: present
+
+- name: clone kubespray github repo
+  git:
+    dest: '{{ kube_prepare_kubespray_repodir }}'
+    repo: '{{ kube_prepare_kubespray_giturl }}'
+
+- name: check if copied mycluster files already exist
+  stat:
+    path: '{{ kube_prepare_kubespray_repodir }}/inventory/mycluster'
+  register: mycluster_configdir
+
+- name: install requirements using pip3 install
+  command:
+    cmd: 'pip3 install -r requirements.txt'
+    chdir: '{{ kube_prepare_kubespray_repodir }}'
+
+- name: copy inventory files from sample to mycluster
+  copy:
+    src: '{{ kube_prepare_kubespray_repodir }}/inventory/sample/'
+    dest: '{{ kube_prepare_kubespray_repodir }}/inventory/mycluster'
+    remote_src: yes
+    directory_mode: yes
+  when: not mycluster_configdir.stat.exists
+
+- name: create hosts config files from template
+  template:
+    src: hosts.yaml.j2
+    dest: '{{ kube_prepare_kubespray_repodir }}/inventory/mycluster/hosts.yaml'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy other config files with no template processing
+  copy:
+    src: '{{ item.key }}'
+    dest: '{{ kube_prepare_kubespray_repodir }}/inventory/mycluster/{{ item.value }}'
+  with_dict:
+    'all.yml': group_vars/all/all.yml
+    'k8s-cluster.yml': group_vars/k8s-cluster/k8s-cluster.yml
+
+#    * configure extras repo on kubes
+
+#    * make sure SSH agent variables are set (SSH_AUTH_SOCK)
+#    * run as root
+#    * `cd /home/ansible/kubespray`
+#    * `ansible-playbook -u ansible -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml`
