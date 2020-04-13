@@ -26,6 +26,9 @@
     owner: root
     group: root
     mode: 0644
+- name: collect facts about system services
+  service_facts:
+  register: services_state
 - name: Configure firewalld zone for primary interface
   firewalld:
     zone: '{{ kube_net_primary_zone }}'
@@ -33,7 +36,7 @@
     permanent: true
     immediate: yes
     state: enabled
-  when: kube_net_primary_zone is defined
+  when: kube_net_primary_zone is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
 - name: Configure firewalld zone for secondary interface
   firewalld:
     zone: '{{ kube_net_secondary_zone }}'
@@ -41,4 +44,10 @@
     permanent: true
     immediate: yes
     state: enabled
-  when: kube_net_secondary_zone is defined
+  when: kube_net_secondary_zone is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
+- name: Stop and disable firewalld
+  service:
+    name: firewalld
+    enabled: no
+    state: stopped
+
