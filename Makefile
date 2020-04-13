@@ -17,6 +17,25 @@ init-rubix:
 rubix:
 	ansible-playbook configure_rubix.yml -i inventory/kubernetes_nodes --ask-vault-pass
 
+kubes:
+	ansible-playbook configure_kubes.yml -i inventory/kubernetes_nodes --ask-vault-pass
+
+storage:
+	ansible-playbook configure_storage.yml -i inventory/kubernetes_nodes --ask-vault-pass
+
+# run storage tasks only on one kube - needed for remount after reboot
+
+storage-kube1:
+	ansible-playbook configure_storage.yml -i inventory/kubernetes_nodes --limit "kube1" --ask-vault-pass
+
+storage-kube2:
+	ansible-playbook configure_storage.yml -i inventory/kubernetes_nodes --limit "kube2" --ask-vault-pass
+
+storage-kube3:
+	ansible-playbook configure_storage.yml -i inventory/kubernetes_nodes --limit "kube3" --ask-vault-pass
+
+# other tasks that limit execution - not normally needed
+
 rubix-apache-only:
 	ansible-playbook configure_rubix.yml -i inventory/kubernetes_nodes --tags "pxe_setup" --skip-tags "kube_boot_server_dnsmasq,kube_boot_server_download_centos_pxe" --ask-vault-pass
 
@@ -31,19 +50,3 @@ kube2:
 
 kube3:
 	ansible-playbook configure_kubes.yml -i inventory/kubernetes_nodes --limit "kube3" --ask-vault-pass
-
-kubes:
-	ansible-playbook configure_kubes.yml -i inventory/kubernetes_nodes --ask-vault-pass
-
-storage-kube1:
-	ansible-playbook configure_storage.yml -i inventory/kubernetes_nodes --limit "kube1" --ask-vault-pass
-
-storage-kube2:
-	ansible-playbook configure_storage.yml -i inventory/kubernetes_nodes --limit "kube2" --ask-vault-pass
-
-storage-kube3:
-	ansible-playbook configure_storage.yml -i inventory/kubernetes_nodes --limit "kube3" --ask-vault-pass
-
-storage:
-	ansible-playbook configure_storage.yml -i inventory/kubernetes_nodes --ask-vault-pass
-
