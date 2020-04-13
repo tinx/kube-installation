@@ -31,9 +31,10 @@
     - '/var/www/html/centos/{{ kube_boot_server_centos_version }}'
     - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates'
     - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates/x86_64'
-    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}'
     - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/os'
     - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/os/x86_64'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/extras'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/extras/x86_64'
 
 - name: Render kickstart config file
   template:
@@ -112,5 +113,15 @@
     kube_repo_mirror_jobname: centos7-updates
     kube_repo_mirror_source: 'rsync://mirror.eu.oneandone.net/centos/{{ kube_boot_server_centos_version }}/updates/x86_64/'
     kube_repo_mirror_target: '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates/x86_64/'
+    kube_repo_mirror_excludes:
+      - 'drpms/'
+
+- name: Mirror CentOS extras Repo
+  include_role:
+    name: kube-repo-mirror
+  vars:
+    kube_repo_mirror_jobname: centos7-extras
+    kube_repo_mirror_source: 'rsync://mirror.eu.oneandone.net/centos/{{ kube_boot_server_centos_version }}/extras/x86_64/'
+    kube_repo_mirror_target: '/var/www/html/centos/{{ kube_boot_server_centos_version }}/extras/x86_64/'
     kube_repo_mirror_excludes:
       - 'drpms/'
