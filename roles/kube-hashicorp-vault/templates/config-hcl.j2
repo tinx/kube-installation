@@ -1,0 +1,10 @@
+storage "file" {
+  path    = "/home/{{ kube_hashicorp_vault_account_name }}/data"
+}
+
+listener "tcp" {
+  address     = "{{ hostvars[inventory_hostname].internal_ip }}:8200"
+  tls_disable = 1
+}
+
+api_addr = "http://{{ hostvars[inventory_hostname].internal_ip }}:8200"

@@ -42,6 +42,9 @@ rubix-apache-only:
 rubix-kubespray-only:
 	ansible-playbook configure_rubix.yml -i inventory/kubernetes_nodes --tags "prepare_kubespray" --ask-vault-pass
 
+rubix-vault-only:
+	ansible-playbook configure_rubix.yml -i inventory/kubernetes_nodes --tags "install_vault" # --ask-vault-pass
+
 kube1:
 	ansible-playbook configure_kubes.yml -i inventory/kubernetes_nodes --limit "kube1" --ask-vault-pass
 

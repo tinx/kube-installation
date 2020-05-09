@@ -92,3 +92,17 @@
         kube_prepare_kubespray_repodir: '/home/ansible/kubespray'
         kube_prepare_kubespray_giturl: 'https://github.com/kubernetes-sigs/kubespray'
 
+- name: Install Hashicorp Vault
+  hosts: kube_install_hosts
+  remote_user: ansible
+  become: true
+  tags:
+    - install_vault
+  tasks:
+    - name: Install vault
+      include_role:
+        name: kube-hashicorp-vault
+      vars:
+        kube_hashicorp_vault_account_name: vault
+        kube_hashicorp_vault_distribution_url: '{{ kube_vault_distribution.url }}'
+        kube_hashicorp_vault_distribution_checksum: '{{ kube_vault_distribution.checksum }}'

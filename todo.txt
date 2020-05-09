@@ -1,5 +1,7 @@
 To Do:
 
+ - configure, deploy and check netchecker on our installation?
+   https://github.com/kubernetes-sigs/kubespray/blob/master/docs/netcheck.md
  - kubespray somehow removes our nameserver on rubix from /etc/resolv.conf
    fix this (right now, running make kubes again also fixes it)
  - kubespray doesn't work if firewalld is running (dns pod cannot reach api server)

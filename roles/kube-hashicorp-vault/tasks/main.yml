@@ -1,0 +1,80 @@
+---
+- name: Create group for vault
+  group:
+    name: '{{ kube_hashicorp_vault_account_name }}'
+    state: present
+
+- name: Create account for vault
+  user:
+    name: '{{ kube_hashicorp_vault_account_name }}'
+    group: '{{ kube_hashicorp_vault_account_name }}'
+    createhome: true
+    comment: ''
+    password_lock: true
+    state: present
+
+- name: Disallow vault account to use sudo
+  file:
+    state: absent
+    path: '/etc/sudoers.d/010_{{ kube_hashicorp_vault_account_name }}-nopasswd'
+  when: (kube_account_sudo is not defined) or (not kube_account_sudo)
+
+- name: Restrictive home dir permissions
+  file:
+    path: '/home/{{ kube_hashicorp_vault_account_name }}'
+    mode: 0700
+    owner: '{{ kube_hashicorp_vault_account_name }}'
+    group: '{{ kube_hashicorp_vault_account_name }}'
+    state: directory
+
+- name: Download vault distribution zip
+  get_url:
+    url: '{{ kube_hashicorp_vault_distribution_url }}'
+    dest: '/home/{{ kube_hashicorp_vault_account_name }}/vault.zip'
+    checksum: '{{ kube_hashicorp_vault_distribution_checksum }}'
+    owner: '{{ kube_hashicorp_vault_account_name }}'
+    group: '{{ kube_hashicorp_vault_account_name }}'
+    mode: 0600
+  register: downloaded_vault_dist
+
+- name: Delete old extracted vault binary
+  file:
+    state: absent
+    path: '/home/{{ kube_hashicorp_vault_account_name }}/vault'
+  when: downloaded_vault_dist.changed
+
+- name: Extract vault distribution
+  unarchive:
+    src: '/home/{{ kube_hashicorp_vault_account_name }}/vault.zip'
+    remote_src: true
+    dest: '/home/{{ kube_hashicorp_vault_account_name }}'
+    creates: '/home/{{ kube_hashicorp_vault_account_name }}/vault'
+    owner: '{{ kube_hashicorp_vault_account_name }}'
+    group: '{{ kube_hashicorp_vault_account_name }}'
+    mode: 0700
+
+- name: Write vault configuration file
+  template:
+    src: config-hcl.j2
+    dest: '/home/{{ kube_hashicorp_vault_account_name }}/config.hcl'
+    owner: '{{ kube_hashicorp_vault_account_name }}'
+    group: '{{ kube_hashicorp_vault_account_name }}'
+    mode: 0600
+  notify: restart vault
+
+- name: Write vault service file
+  template:
+    src: vault-service.j2
+    dest: /lib/systemd/system/vault.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart vault
+
+- name: Start and enable vault service
+  systemd:
+    name: vault
+    state: started
+    enabled: yes
+    masked: no
+    daemon_reload: yes
