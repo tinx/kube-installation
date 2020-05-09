@@ -12,6 +12,7 @@
     comment: ''
     password_lock: true
     state: present
+    shell: /bin/bash
 
 - name: Disallow vault account to use sudo
   file:
@@ -40,26 +41,34 @@
 - name: Delete old extracted vault binary
   file:
     state: absent
-    path: '/home/{{ kube_hashicorp_vault_account_name }}/vault'
+    path: '/usr/local/bin/vault'
   when: downloaded_vault_dist.changed
 
 - name: Extract vault distribution
   unarchive:
     src: '/home/{{ kube_hashicorp_vault_account_name }}/vault.zip'
     remote_src: true
-    dest: '/home/{{ kube_hashicorp_vault_account_name }}'
-    creates: '/home/{{ kube_hashicorp_vault_account_name }}/vault'
-    owner: '{{ kube_hashicorp_vault_account_name }}'
-    group: '{{ kube_hashicorp_vault_account_name }}'
-    mode: 0700
+    dest: '/usr/local/bin'
+    creates: '/usr/local/bin/vault'
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create vault config dir
+  file:
+    path: '/usr/local/etc/vault'
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 - name: Write vault configuration file
   template:
     src: config-hcl.j2
-    dest: '/home/{{ kube_hashicorp_vault_account_name }}/config.hcl'
-    owner: '{{ kube_hashicorp_vault_account_name }}'
-    group: '{{ kube_hashicorp_vault_account_name }}'
-    mode: 0600
+    dest: '/usr/local/etc/vault/config.hcl'
+    owner: root
+    group: root
+    mode: 0644
   notify: restart vault
 
 - name: Write vault service file
@@ -78,3 +87,8 @@
     enabled: yes
     masked: no
     daemon_reload: yes
+
+- name: Configure vault server address env variable
+  lineinfile:
+    line: 'export VAULT_ADDR="http://{{ hostvars[inventory_hostname].internal_ip }}:8200"'
+    path: '/home/{{ kube_hashicorp_vault_account_name }}/.bashrc'

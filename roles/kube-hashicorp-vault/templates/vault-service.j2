@@ -3,7 +3,7 @@ Description=Hashicorp Vault service
 Documentation=https://www.vaultproject.io/docs/
 Requires=network.target
 After=network.target auditd.service
-ConditionFileNotEmpty=/home/{{ kube_hashicorp_vault_account_name }}/config.hcl
+ConditionFileNotEmpty=/usr/local/etc/vault/config.hcl
 StartLimitIntervalSec=60
 StartLimitBurst=3
 
@@ -18,7 +18,7 @@ AmbientCapabilities=CAP_IPC_LOCK
 Capabilities=CAP_IPC_LOCK+ep
 CapabilityBoundingSet=CAP_SYSLOG CAP_IPC_LOCK
 NoNewPrivileges=yes
-ExecStart=/home/{{ kube_hashicorp_vault_account_name }}/vault server -config=/home/{{ kube_hashicorp_vault_account_name }}/config.hcl
+ExecStart=/usr/local/bin/vault server -config=/usr/local/etc/vault/config.hcl
 ExecReload=/bin/kill --signal HUP $MAINPID
 KillMode=process
 KillSignal=SIGINT
