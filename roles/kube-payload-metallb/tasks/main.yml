@@ -1,0 +1,105 @@
+---
+- name: Create payloads config base dir
+  file:
+    path: '{{ kube_payload_basedir }}'
+    state: directory
+    owner: '{{ kube_payload_owner }}'
+    group: '{{ kube_payload_group }}'
+    mode: 0755
+
+- name: Create metallb payload config base dir
+  file:
+    path: '{{ kube_payload_basedir }}/metallb'
+    state: directory
+    owner: '{{ kube_payload_owner }}'
+    group: '{{ kube_payload_group }}'
+    mode: 0755
+
+- name: Download metallb namespace manifest
+  get_url:
+    url: 'https://raw.githubusercontent.com/metallb/metallb/v{{ kube_payload_metallb_version }}/manifests/namespace.yaml'
+    dest: '{{ kube_payload_basedir }}/metallb/namespace.yaml'
+    owner: '{{ kube_payload_owner }}'
+    group: '{{ kube_payload_group }}'
+    mode: 0644
+
+- name: Download metallb install manifest
+  get_url:
+    url: 'https://raw.githubusercontent.com/metallb/metallb/v{{ kube_payload_metallb_version }}/manifests/metallb.yaml'
+    dest: '{{ kube_payload_basedir }}/metallb/metallb.yaml'
+    owner: '{{ kube_payload_owner }}'
+    group: '{{ kube_payload_group }}'
+    mode: 0644
+
+- name: Write configmap manifest
+  template:
+    src: configmap-yaml.j2
+    dest: '{{ kube_payload_basedir }}/metallb/configmap.yaml'
+    owner: '{{ kube_payload_owner }}'
+    group: '{{ kube_payload_group }}'
+    mode: 0644
+
+- name: Figure out if changes to strictARP are needed
+  shell:
+    chdir: '{{ kube_payload_basedir }}/metallb'
+    cmd: |
+      /usr/local/bin/kubectl get configmap kube-proxy -n kube-system -o yaml | \
+      /bin/sed -e "s/strictARP: false/strictARP: true/" | \
+      /usr/local/bin/kubectl diff -f - -n kube-system > kube-proxy-configmap-diff.txt
+  run_once: true
+  register: strictarp_diff_result
+  changed_when: false
+  failed_when:
+    - strictarp_diff_result.rc != 0
+    - strictarp_diff_result.rc != 1
+
+- name: Apply changes to strictARP
+  shell:
+    chdir: '{{ kube_payload_basedir }}/metallb'
+    cmd: |
+      /usr/local/bin/kubectl get configmap kube-proxy -n kube-system -o yaml | \
+      /bin/sed -e "s/strictARP: false/strictARP: true/" | \
+      /usr/local/bin/kubectl apply -f - -n kube-system
+  run_once: true
+  when: strictarp_diff_result.rc != 0
+
+- name: Apply namespace manifest
+  include_role:
+    name: kube-kubectl-apply
+  vars:
+    kube_kubectl_apply_dir: '{{ kube_payload_basedir }}/metallb'
+    kube_kubectl_apply_yaml: namespace.yaml
+
+- name: Apply install manifest
+  include_role:
+    name: kube-kubectl-apply
+  vars:
+    kube_kubectl_apply_dir: '{{ kube_payload_basedir }}/metallb'
+    kube_kubectl_apply_yaml: metallb.yaml
+    kube_kubectl_apply_namespace: metallb-system
+
+- name: Check if secret already exists
+  shell:
+    chdir: '{{ kube_payload_basedir }}/metallb'
+    cmd: |
+      /usr/local/bin/kubectl get secret memberlist -n metallb-system -o name | \
+      /bin/grep 'secret/memberlist'
+  run_once: true
+  register: secret_check_result
+  changed_when: false
+
+- name: Create memberlist secret
+  shell:
+    chdir: '{{ kube_payload_basedir }}/metallb'
+    cmd: |
+      /usr/local/bin/kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(/bin/openssl rand -base64 128)"
+  run_once: true
+  when: secret_check_result.rc != 0
+
+- name: Apply configmap manifest
+  include_role:
+    name: kube-kubectl-apply
+  vars:
+    kube_kubectl_apply_dir: '{{ kube_payload_basedir }}/metallb'
+    kube_kubectl_apply_yaml: configmap.yaml
+    kube_kubectl_apply_namespace: metallb-system

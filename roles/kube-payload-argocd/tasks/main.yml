@@ -45,3 +45,10 @@
     kube_kubectl_apply_dir: '{{ kube_payload_basedir }}/argocd'
     kube_kubectl_apply_yaml: install.yaml
     kube_kubectl_apply_namespace: argocd
+
+- name: Set service type to loadbalancer
+  shell:
+    chdir: '{{ kube_payload_basedir }}/argocd'
+    cmd: |
+      /usr/local/bin/kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+  run_once: true

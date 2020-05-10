@@ -1,8 +1,13 @@
 kube-payload-argocd
 ===================
 
-Deploy [argocd](https://argoproj.github.io/argo-cd/) using their predefined
-resources from a [kustomize](https://github.com/kubernetes-sigs/kustomize) script.
+Deploy [argocd](https://argoproj.github.io/argo-cd/) using their predefined resources.
+
+Dependencies
+------------
+
+Needs some deployed load balancer, e.g. metallb which 
+can be deployed by role `kube-payload-metallb`.
 
 Role Variables
 --------------

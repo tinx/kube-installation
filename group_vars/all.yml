@@ -176,3 +176,5 @@ kube_payload_owner: root
 kube_payload_group: root
 
 kube_argocd_version: '1.5.4'
+kube_metallb_version: '0.9.3'
+kube_metallb_iprange: '192.168.0.200-192.168.0.250'

@@ -1,4 +1,17 @@
 ---
+- name: Deploy MetalLB
+  hosts: kube_nodes
+  remote_user: ansible
+  become: true
+  tags:
+    - payload_deploy_metallb
+  tasks:
+    - include_role:
+        name: kube-payload-metallb
+      vars:
+        kube_payload_metallb_version: '{{ kube_metallb_version }}'
+        kube_payload_metallb_iprange: '{{ kube_metallb_iprange }}'
+
 - name: Deploy ArgoCD
   hosts: kube_nodes
   remote_user: ansible
