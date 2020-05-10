@@ -1,0 +1,12 @@
+---
+- name: Deploy ArgoCD
+  hosts: kube_nodes
+  remote_user: ansible
+  become: true
+  tags:
+   - payload_deploy_argocd
+  tasks:
+    - include_role:
+        name: kube-payload-argocd
+      vars:
+        kube_payload_argocd_version: '{{ kube_argocd_version }}'

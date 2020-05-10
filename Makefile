@@ -23,6 +23,9 @@ kubes:
 storage:
 	ansible-playbook configure_storage.yml -i inventory/kubernetes_nodes --ask-vault-pass
 
+payloads:
+	ansible-playbook configure_payloads.yml -i inventory/kubernetes_nodes # --ask-vault-pass
+
 # run storage tasks only on one kube - needed for remount after reboot
 
 storage-kube1:

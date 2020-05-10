@@ -1,0 +1,18 @@
+---
+- name: Figure out if changes are needed
+  command:
+    chdir: '{{ kube_kubectl_apply_dir }}'
+    cmd: '/usr/local/bin/kubectl diff {{ "-n " + kube_kubectl_apply_namespace + " " if kube_kubectl_apply_namespace is defined else "" }}-f {{ kube_kubectl_apply_yaml }}'
+  run_once: true
+  register: diff_result
+  changed_when: false
+  failed_when:
+    - diff_result.rc != 0
+    - diff_result.rc != 1
+
+- name: Apply configuration
+  command:
+    chdir: '{{ kube_kubectl_apply_dir }}'
+    cmd: '/usr/local/bin/kubectl apply {{ "-n " + kube_kubectl_apply_namespace + " " if kube_kubectl_apply_namespace is defined else "" }}-f {{ kube_kubectl_apply_yaml }} -o name'
+  run_once: true
+  when: diff_result.rc != 0

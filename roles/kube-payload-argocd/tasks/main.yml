@@ -1,0 +1,47 @@
+---
+- name: Create payloads config base dir
+  file:
+    path: '{{ kube_payload_basedir }}'
+    state: directory
+    owner: '{{ kube_payload_owner }}'
+    group: '{{ kube_payload_group }}'
+    mode: 0755
+
+- name: Create argocd payload config base dir
+  file:
+    path: '{{ kube_payload_basedir }}/argocd'
+    state: directory
+    owner: '{{ kube_payload_owner }}'
+    group: '{{ kube_payload_group }}'
+    mode: 0755
+
+- name: Write namespace manifest
+  template:
+    src: namespace-yaml.j2
+    dest: '{{ kube_payload_basedir }}/argocd/namespace.yaml'
+    owner: '{{ kube_payload_owner }}'
+    group: '{{ kube_payload_group }}'
+    mode: 0644
+
+- name: Download argocd install manifest
+  get_url:
+    url: 'https://raw.githubusercontent.com/argoproj/argo-cd/v{{ kube_payload_argocd_version }}/manifests/install.yaml'
+    dest: '{{ kube_payload_basedir }}/argocd/install.yaml'
+    owner: '{{ kube_payload_owner }}'
+    group: '{{ kube_payload_group }}'
+    mode: 0644
+
+- name: Apply namespace manifest
+  include_role:
+    name: kube-kubectl-apply
+  vars:
+    kube_kubectl_apply_dir: '{{ kube_payload_basedir }}/argocd'
+    kube_kubectl_apply_yaml: namespace.yaml
+
+- name: Apply install manifest
+  include_role:
+    name: kube-kubectl-apply
+  vars:
+    kube_kubectl_apply_dir: '{{ kube_payload_basedir }}/argocd'
+    kube_kubectl_apply_yaml: install.yaml
+    kube_kubectl_apply_namespace: argocd

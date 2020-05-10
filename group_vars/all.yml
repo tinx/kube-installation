@@ -170,3 +170,9 @@ kube_users:
 kube_vault_distribution:
   url: 'https://releases.hashicorp.com/vault/1.4.1/vault_1.4.1_linux_arm.zip'
   checksum: 'sha256:cb9ef2be0d81e1d102801cd9dc747a1df9a0fd104465a4bf697244929947a494'
+
+kube_payload_basedir: /root/kube-payloads
+kube_payload_owner: root
+kube_payload_group: root
+
+kube_argocd_version: '1.5.4'
