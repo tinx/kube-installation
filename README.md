@@ -38,7 +38,6 @@ rubix    ansible_host=192.168.0.118 ...
   you may have to add rubix to your /etc/hosts with its permanent ip
   (192.168.0.40)
 
-
 ## Full Install of the Kube Node Host Systems
 
 * boot them with a blanked disk `/dev/sda`

@@ -19,6 +19,11 @@
     kube_net_secondary_broadcast: '{{ kube_networks.external.broadcast }}'
     kube_net_secondary_gateway: '{{ kube_networks.external.gateway }}'
     kube_net_secondary_zone: public
+- name: Disable NetworkManager - this is a server
+  service:
+    name: NetworkManager
+    enabled: no
+    state: stopped
 - name: Configure static dns resolver
   include_role:
     name: kube-net-static-dns-resolver
