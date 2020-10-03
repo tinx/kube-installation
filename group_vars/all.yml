@@ -14,26 +14,26 @@ kube_networks:
     broadcast: 192.168.0.255
     nameserver: 192.168.0.8
 
-kube_centos_version: 7.7.1908
+kube_centos_version: 7.8.2003
 kube_centos_iso_download_url_path: 'http://mirror.eu.oneandone.net/linux/distributions/centos/7/isos/x86_64/'
-kube_centos_iso_filename: 'CentOS-7-x86_64-Minimal-1908.iso'
-kube_centos_iso_checksum: 'sha256:9a2c47d97b9975452f7d582264e9fc16d108ed8252ac6816239a3b58cef5c53d'
+kube_centos_iso_filename: 'CentOS-7-x86_64-Minimal-2003.iso'
+kube_centos_iso_checksum: 'sha256:659691c28a0e672558b003d223f83938f254b39875ee7559d1a4a14c79173193'
 kube_centos_pxe_files:
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/EFI/BOOT/BOOTX64.EFI'
     filename: bootx64.efi
     checksum: 'sha256:62c6affbee1ba9a0435562db6e092a5018effeed0bd0f1d0494f34ce6cd403e9'
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/EFI/BOOT/grubx64.efi'
     filename: grubx64.efi
-    checksum: 'sha256:90008a4584a1afe1f7ee6ecba463b48a50911f792512c54f8fa9c5f06e40f383'
+    checksum: 'sha256:596b9b3823343e227e6a82ab591362f1e1e6ccd4afa634575c3aeeafbf24220e'
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/images/efiboot.img'
     filename: efiboot.img
-    checksum: 'sha256:568b80e3bdbc6dd8652c1a7cbd039bc3736a0ecf35f042c383338ab487310785'
+    checksum: 'sha256:8e18302cc8029da5f7dea2d8d770b38e77d5e387bb0f83f77def7a46b97e26dc'
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/images/pxeboot/initrd.img'
     filename: pxeboot/initrd.img
-    checksum: 'sha256:8c97a6f32ae8ab59425bdff8321eb8d99827313fb51e5498e2fcb438befa3d83'
+    checksum: 'sha256:8f35a17857179742ffd743e326ed68dc470d2b6faccb14dbd5957545f1a727a6'
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/images/pxeboot/vmlinuz'
     filename: pxeboot/vmlinuz
-    checksum: 'sha256:156ddeaccea0ee51eb9af42b2551f393f84d6adaf7d257fa5b174657d38cead6'
+    checksum: 'sha256:5561196e7128dbc3b08bd1c0d79d41f2e7ff748006204d68c257b0e06e198761'
 
 kube_ntp_servers:
   - pool.ntp.org
