@@ -168,8 +168,8 @@ kube_users:
           6161
 
 kube_vault_distribution:
-  url: 'https://releases.hashicorp.com/vault/1.4.1/vault_1.4.1_linux_arm.zip'
-  checksum: 'sha256:cb9ef2be0d81e1d102801cd9dc747a1df9a0fd104465a4bf697244929947a494'
+  url: 'https://releases.hashicorp.com/vault/1.5.4/vault_1.5.4_linux_arm.zip'
+  checksum: 'sha256:1c83e5695b5a62559b67af269a827c0452d69e63dbfaac80abc0ba6e3f8d7d26'
 
 kube_payload_basedir: /root/kube-payloads
 kube_payload_owner: root
