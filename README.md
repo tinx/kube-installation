@@ -13,7 +13,9 @@
 
 ## Bootstrapping Rubix
 
-* install a fresh Raspbian (stretch-lite) on the Raspberry Pi (rubix)
+* install a fresh Raspbian (buster-lite) on the Raspberry Pi (rubix)
+  * updated from stretch-lite to Raspbian buster-lite following 
+    [these instructions](https://pimylifeup.com/upgrade-raspbian-stretch-to-raspbian-buster/)
 * add ssh key to "pi" account, so that Ansible can log in
 * set non-default password for account "pi"
 * sudo systemctl start ssh

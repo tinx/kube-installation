@@ -1,5 +1,34 @@
 To Do:
 
+ - deploy ceph/rook into k8s using argocd
+
+   https://www.linux-magazin.de/ausgaben/2019/12/rook-2/5/
+   # git clone https://github.com/rook/rook.git
+   # cd rook/cluster/examples/kubernetes/ceph
+   # kubectl create -f operator.yaml
+   # kubectl get pods -n rook-ceph-system
+   # kubectl create -f cluster.yaml
+
+ - document update/recovery paths in README
+    - update k8s version using kubespray
+    - reinstall a k8s node using kubespray
+    - reinstall os on a node w/o deleting storage
+    - reinstall a node with deleting storage (w/o losing data)
+    - reboot a node and use make storage to re-mount (w/o losing data)
+
+ - check if kubespray now supports centos8 and update everything (currently experimental as of 2020-10-03)
+ - network tester
+
+   yum install iperf iperf3
+   apt-get install iperf iperf3
+
+    https://bitsanddragons.wordpress.com/2018/03/13/speed-test-with-iperf-on-centos-7/
+
+ - External DNS https://github.com/kubernetes-sigs/external-dns
+   + DnsMasq configured to accept RFC2136
+   DNS per MetalLB with fixed IP 192.168.0.201 that forwards to .8 except for k8s services
+   (Router can be configured to announce this DNS per dhcp)
+
  - configure, deploy and check netchecker on our installation?
    https://github.com/kubernetes-sigs/kubespray/blob/master/docs/netcheck.md
  - kubespray somehow removes our nameserver on rubix from /etc/resolv.conf
@@ -52,7 +81,9 @@ To Do:
     - ensure Ceph is healthy + synchronized
     - health check for kubernetes
 
- - refactor kubes ansible code to run on just one kube
  - orchestrated re-install for multiple kubes
 
  - generate /etc/hosts on all nodes, for times when rubix is down
+ - templatify hosts.yaml.j2 to read node IPs and names from config
+ - mirror a secretless argocd git repo on rubix's apache
+   + roll out needed secrets via ansible
