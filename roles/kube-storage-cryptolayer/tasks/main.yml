@@ -35,7 +35,7 @@
   changed_when: false
 
 # if either of the two tests failed, use the rendered script to create and/or open the crypto volume
-- name: Run cryptsetup luksFormat unless already a luks volume
+- name: Run cryptsetup luksFormat unless already a luks volume, or mount if just not mounted
   become: false
   local_action:
     module: shell
