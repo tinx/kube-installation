@@ -57,8 +57,6 @@ rubix    ansible_host=192.168.0.118 ...
     * `ansible-playbook -u ansible -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml`
     * after installation has finished you should have a running k8s cluster, and root should have
       a working api config file on the nodes. Try `kubectl get pods`
-    * *known problem*: some versions of kubespray overwrite the DNS config on the nodes, just 
-      use `make kubes` to fix the settings if this happens
 
 ## Deploy Infrastructure in Kubernetes
 

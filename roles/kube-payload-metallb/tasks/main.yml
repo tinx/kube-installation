@@ -85,6 +85,7 @@
       /usr/local/bin/kubectl get secret memberlist -n metallb-system -o name | \
       /bin/grep 'secret/memberlist'
   run_once: true
+  ignore_errors: yes
   register: secret_check_result
   changed_when: false
 

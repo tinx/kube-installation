@@ -178,6 +178,10 @@ kube_payload_basedir: /root/kube-payloads
 kube_payload_owner: root
 kube_payload_group: root
 
-kube_argocd_version: '1.5.4'
+# https://github.com/argoproj/argo-cd
+kube_argocd_version: '1.7.7'
+
+# https://github.com/metallb/metallb
 kube_metallb_version: '0.9.3'
 kube_metallb_iprange: '192.168.0.200-192.168.0.250'
+

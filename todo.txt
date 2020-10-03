@@ -1,5 +1,10 @@
 To Do:
 
+ - disable network manager completely BEFORE writing DNS config on nodes
+   https://www.thegeekdiary.com/centos-rhel-7-how-to-disable-networkmanager/
+
+ - wait until metallb is up before continuing to deploy argocd (needs service type lb)
+
  - deploy ceph/rook into k8s using argocd
 
    https://www.linux-magazin.de/ausgaben/2019/12/rook-2/5/
