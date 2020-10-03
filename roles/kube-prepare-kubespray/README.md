@@ -8,11 +8,14 @@ Limitations
 
 Only tested on Centos 7.
 
+Still includes some hard-coded IPs and node names in `hosts.yaml.j2`.
+
 Role Variables
 --------------
 
 - kube_prepare_kubespray_repodir - path to directory to use for cloning
 - kube_prepare_kubespray_giturl - git url to use for cloning
+- kube_prepare_kubespray_version - git version tag / branch or HEAD to clone
 
 Example Playbook
 ----------------
@@ -27,6 +30,7 @@ Example Playbook
           vars:
             kube_prepare_kubespray_repodir: 'kubespray'
             kube_prepare_kubespray_giturl: 'https://github.com/kubernetes-sigs/kubespray'
+            kube_prepare_kubespray_version: 'v.2.14.1'
 
 License
 -------

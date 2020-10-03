@@ -25,7 +25,7 @@ bin_dir: /usr/local/bin
 ## Internal loadbalancers for apiservers
 # loadbalancer_apiserver_localhost: true
 # valid options are "nginx" or "haproxy"
-# loadbalancer_apiserver_type: nginx # valid values "nginx" or "haproxy"
+# loadbalancer_apiserver_type: nginx  # valid values "nginx" or "haproxy"
 
 ## Local loadbalancer should use this port
 ## And must be set port 6443
@@ -35,11 +35,6 @@ loadbalancer_apiserver_port: 6443
 loadbalancer_apiserver_healthcheck_port: 8081
 
 ### OTHER OPTIONAL VARIABLES
-## For some things, kubelet needs to load kernel modules.  For example, dynamic kernel services are needed
-## for mounting persistent volumes into containers.  These may not be loaded by preinstall kubernetes
-## processes.  For example, ceph and rbd backed volumes.  Set to true to allow kubelet to load kernel
-## modules.
-# kubelet_load_modules: false
 
 ## Upstream dns servers
 upstream_dns_servers:
@@ -54,8 +49,8 @@ upstream_dns_servers:
 # cloud_provider:
 
 ## When cloud_provider is set to 'external', you can set the cloud controller to deploy
-## Supported cloud controllers are: 'openstack'
-## When openstack is used make sure to source in the openstack credentials
+## Supported cloud controllers are: 'openstack' and 'vsphere'
+## When openstack or vsphere are used make sure to source in the required fields
 # external_cloud_provider:
 
 ## Set these proxy values in order to update package manager and docker daemon to use proxies

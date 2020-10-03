@@ -91,6 +91,7 @@
       vars:
         kube_prepare_kubespray_repodir: '/home/ansible/kubespray'
         kube_prepare_kubespray_giturl: 'https://github.com/kubernetes-sigs/kubespray'
+        kube_prepare_kubespray_version: '{{ kube_kubespray_version }}'
 
 - name: Install Hashicorp Vault
   hosts: kube_install_hosts

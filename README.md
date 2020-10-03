@@ -46,9 +46,25 @@ rubix    ansible_host=192.168.0.118 ...
     * this will perform a pxe boot and kickstart centos installation.
 * run ```make kubes```
 * reboot all kubes so network is available
+* run ```make kubes``` again to make sure all configs were fully applied (will also fix DNS config)
 * if you wish to completely wipe storage. now is the time to blank disk `/dev/sdb` on all three kubes
     * run `dd if=/dev/zero of=/dev/sdb bs=1M count=100` to blank the storage disks
-* run ```make storage```
-* for now: On Rubix as root:
-    * make sure SSH agent variables are set (SSH_AUTH_SOCK) and auth forwarding was on when you connected (ssh -A)
+* run ```make storage``` - this will mount storage if already initialized, or initialize it if not
+* Roll out kubernetes using kubespray:
+    * make sure SSH agent variables are set (SSH_AUTH_SOCK)
+    * connect to rubix with auth forwarding as user ansible: `ssh -A ansible@rubix`
+    * `cd /home/ansible/kubespray`
     * `ansible-playbook -u ansible -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml`
+    * after installation has finished you should have a running k8s cluster, and root should have
+      a working api config file on the nodes. Try `kubectl get pods`
+    * *known problem*: some versions of kubespray overwrite the DNS config on the nodes, just 
+      use `make kubes` to fix the settings if this happens
+
+## Deploy Infrastructure in Kubernetes
+
+* run ```make payloads```
+
+## Remount Storage after Node Reboot
+
+* run ```make storage``` (for all 3 nodes) or e.g. ```make storage-kube1```.
+
