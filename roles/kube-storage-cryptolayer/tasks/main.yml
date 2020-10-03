@@ -70,11 +70,6 @@
   shell: 'vgcreate vg_storage /dev/mapper/{{ kube_storage_local_crypted_devicename }}'
   when: wasLuksVolume.rc != 0
 
-- name: Create 2T lv for the ceph pool
-  shell: 'lvcreate -L 2048G vg_storage -n ceph'
+- name: Create lv for full remaining space (for ceph storage)
+  shell: 'lvcreate -l 100%FREE vg_storage -n ceph'
   when: wasLuksVolume.rc != 0
-
-- name: Create lv for remaining space (for local docker storage)
-  shell: 'lvcreate -l 100%FREE vg_storage -n local'
-  when: wasLuksVolume.rc != 0
-

@@ -4,6 +4,7 @@ To Do:
    https://www.thegeekdiary.com/centos-rhel-7-how-to-disable-networkmanager/
 
  - wait until metallb is up before continuing to deploy argocd (needs service type lb)
+   https://stackoverflow.com/questions/53198576/ansible-playbook-wait-until-all-pods-running
 
  - deploy ceph/rook into k8s using argocd
 

@@ -59,3 +59,6 @@ kube3:
 
 payloads-metallb:
 	ansible-playbook configure_payloads.yml -i inventory/kubernetes_nodes --tags "payload_deploy_metallb" # --ask-vault-pass
+
+payloads-rook:
+	ansible-playbook configure_payloads.yml -i inventory/kubernetes_nodes --tags "payload_deploy_rook" # --ask-vault-pass

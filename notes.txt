@@ -27,3 +27,13 @@ else
     # Something went wrong!
     exit 1
 fi
+
+# see ceph dashboard
+
+kubectl get svc -n rook-ceph -> gets you the dashboard service cluster IP
+ssh -L 8443:10.233.12.246:8443 ansible@kube1
+browse to https://localhost:8443/
+
+# example for pv for LVM device
+
+https://github.com/rook/rook/issues/5075

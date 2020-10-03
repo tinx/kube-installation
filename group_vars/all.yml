@@ -185,3 +185,8 @@ kube_argocd_version: '1.7.7'
 kube_metallb_version: '0.9.3'
 kube_metallb_iprange: '192.168.0.200-192.168.0.250'
 
+# https://github.com/rook/rook
+#
+kube_rook_release_train: '1.4'
+kube_rook_storage_device: '/dev/mapper/vg_storage-ceph'
+

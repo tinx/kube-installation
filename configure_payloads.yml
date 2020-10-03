@@ -23,3 +23,16 @@
         name: kube-payload-argocd
       vars:
         kube_payload_argocd_version: '{{ kube_argocd_version }}'
+
+- name: Deploy Rook/Ceph
+  hosts: kube_nodes
+  remote_user: ansible
+  become: true
+  tags:
+    - payload_deploy_rook
+  tasks:
+    - include_role:
+        name: kube-payload-rook
+      vars:
+        kube_payload_rook_release_train: '{{ kube_rook_release_train }}'
+        kube_payload_rook_storage_device: '{{ kube_rook_storage_device }}'
