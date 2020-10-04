@@ -45,7 +45,7 @@ rubix    ansible_host=192.168.0.118 ...
     * this will perform a pxe boot and kickstart centos installation.
 * run ```make kubes```
 * reboot all kubes so network is available
-* run ```make kubes``` again to make sure all configs were fully applied (will also fix DNS config)
+* run ```make kubes``` again to make sure all configs were fully applied
 * if you wish to completely wipe storage. now is the time to blank disk `/dev/sdb` on all three kubes
     * run `dd if=/dev/zero of=/dev/sdb bs=1M count=100` to blank the storage disks
 * run ```make storage``` - this will mount storage if already initialized, or initialize it if not

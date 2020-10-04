@@ -1,0 +1,28 @@
+apiVersion: ceph.rook.io/v1
+kind: CephNFS
+metadata:
+  name: my-nfs
+  namespace: rook-ceph
+spec:
+  rados:
+    pool: myfs-data0
+    namespace: nfs-ns
+  server:
+    active: 2
+    placement:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - rook-ceph-todo
+          topologyKey: "kubernetes.io/hostname"
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
+      requests:
+        cpu: "200m"
+        memory: "512Mi"

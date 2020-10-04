@@ -1,8 +1,5 @@
 To Do:
 
- - disable network manager completely BEFORE writing DNS config on nodes
-   https://www.thegeekdiary.com/centos-rhel-7-how-to-disable-networkmanager/
-
  - wait until metallb is up before continuing to deploy argocd (needs service type lb)
    https://stackoverflow.com/questions/53198576/ansible-playbook-wait-until-all-pods-running
 
@@ -15,6 +12,11 @@ To Do:
    # kubectl get pods -n rook-ceph-system
    # kubectl create -f cluster.yaml
 
+ - configure ceph shared filesystem CRD in rook: https://rook.github.io/docs/rook/v1.4/ceph-filesystem-crd.html
+   configure NFS CRD on top of it: https://rook.github.io/docs/rook/v1.4/ceph-nfs-crd.html
+   deploy SMB container that publishes it to Windows (no ready-made solution yet)
+    https://github.com/dperson/samba
+
  - document update/recovery paths in README
     - update k8s version using kubespray
     - reinstall a k8s node using kubespray
@@ -23,6 +25,7 @@ To Do:
     - reboot a node and use make storage to re-mount (w/o losing data)
 
  - check if kubespray now supports centos8 and update everything (currently experimental as of 2020-10-03)
+
  - network tester
 
    yum install iperf iperf3
@@ -37,8 +40,6 @@ To Do:
 
  - configure, deploy and check netchecker on our installation?
    https://github.com/kubernetes-sigs/kubespray/blob/master/docs/netcheck.md
- - kubespray somehow removes our nameserver on rubix from /etc/resolv.conf
-   fix this (right now, running make kubes again also fixes it)
  - kubespray doesn't work if firewalld is running (dns pod cannot reach api server)
    find configuration setting to make it co-exist?
  - pip3 install requirements.txt runs every time on rubix - fix this? can we run a check against an expected state?
