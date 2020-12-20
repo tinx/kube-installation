@@ -64,7 +64,27 @@ rubix    ansible_host=192.168.0.118 ...
         * make sure you note down the admin password, which is the pod name when argocd first starts up
     * this will deploy rook/ceph
 
+
+
+# Kubernetes Cluster Maintenance
+
 ## Remount Storage after Node Reboot
 
 * run ```make storage``` (for all 3 nodes) or e.g. ```make storage-kube1```.
 
+## Verify Cluster State
+
+* etcd: check `etcdctl --key="/etc/ssl/etcd/ssl/admin-kube2-key.pem" --cert="/etc/ssl/etcd/ssl/admin-kube2.pem" --endpoints=https://192.168.200.42:2379 member list`
+  shows all 3 etcd nodes as started (example for kube2)
+* k8s: check `kubectl get node` shows all 3 nodes as ready
+* ceph: ssh into a node, forwarding dashboard port/ip (`kubectl get service -n rook-ceph`), log in and check that all 3
+  nodes are in quorum
+
+## Repair/Reinstall a Lost Cluster Node
+
+### Verify etcd installation after repairing a cluster node
+
+* remove node with kubespray's `reset.yml --limit=<host>`, then add it again using `cluster.yml --limit=<host>`.
+* check `etcdctl --key="/etc/ssl/etcd/ssl/admin-kube2-key.pem" --cert="/etc/ssl/etcd/ssl/admin-kube2.pem" --endpoints=https://192.168.200.42:2379 member list`
+  shows all 3 etcd nodes as started (example for kube2)
+* if initial reinstall failed because the first master was not available, you may need to delete `/var/lib/etcd/*` 
