@@ -60,6 +60,9 @@ rubix    ansible_host=192.168.0.118 ...
 ## Deploy Infrastructure in Kubernetes
 
 * run ```make payloads```
+    * this will deploy argocd and expose it as a loadbalanced service on the first ip in the metalLB range
+        * make sure you note down the admin password, which is the pod name when argocd first starts up
+    * this will deploy rook/ceph
 
 ## Remount Storage after Node Reboot
 
