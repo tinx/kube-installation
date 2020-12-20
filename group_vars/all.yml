@@ -14,26 +14,26 @@ kube_networks:
     broadcast: 192.168.0.255
     nameserver: 192.168.0.8
 
-kube_centos_version: 7.8.2003
+kube_centos_version: 7.9.2009
 kube_centos_iso_download_url_path: 'http://mirror.eu.oneandone.net/linux/distributions/centos/7/isos/x86_64/'
-kube_centos_iso_filename: 'CentOS-7-x86_64-Minimal-2003.iso'
-kube_centos_iso_checksum: 'sha256:659691c28a0e672558b003d223f83938f254b39875ee7559d1a4a14c79173193'
+kube_centos_iso_filename: 'CentOS-7-x86_64-Minimal-2009.iso'
+kube_centos_iso_checksum: 'sha256:07b94e6b1a0b0260b94c83d6bb76b26bf7a310dc78d7a9c7432809fb9bc6194a'
 kube_centos_pxe_files:
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/EFI/BOOT/BOOTX64.EFI'
     filename: bootx64.efi
-    checksum: 'sha256:62c6affbee1ba9a0435562db6e092a5018effeed0bd0f1d0494f34ce6cd403e9'
+    checksum: 'sha256:94188552a6e180aecf4d27878874c912518fbdf460fed5e53dcd10e0a7a52f8b'
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/EFI/BOOT/grubx64.efi'
     filename: grubx64.efi
-    checksum: 'sha256:596b9b3823343e227e6a82ab591362f1e1e6ccd4afa634575c3aeeafbf24220e'
+    checksum: 'sha256:910204ae0b6a42800dda97eec6717ecc2a8d2beb03290f56171fa22ce7e7caf8'
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/images/efiboot.img'
     filename: efiboot.img
-    checksum: 'sha256:8e18302cc8029da5f7dea2d8d770b38e77d5e387bb0f83f77def7a46b97e26dc'
+    checksum: 'sha256:7a75121b77787c6e04de6432793c1cd67dc2055c4f8c0d4cdc0c3664c47da145'
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/images/pxeboot/initrd.img'
     filename: pxeboot/initrd.img
-    checksum: 'sha256:8f35a17857179742ffd743e326ed68dc470d2b6faccb14dbd5957545f1a727a6'
+    checksum: 'sha256:d2950563945a6d3ff285dc9f1be334a204f2ce10e3359675eacca96f48d5526a'
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/images/pxeboot/vmlinuz'
     filename: pxeboot/vmlinuz
-    checksum: 'sha256:5561196e7128dbc3b08bd1c0d79d41f2e7ff748006204d68c257b0e06e198761'
+    checksum: 'sha256:ab8ea479170dc4b74d20074e399701ca87e3a8057224f5ab30794de23ee72e90'
 
 kube_ntp_servers:
   - pool.ntp.org
