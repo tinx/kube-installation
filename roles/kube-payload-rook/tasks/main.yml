@@ -17,7 +17,7 @@
 
 - name: Write pv manifest (StorageClass + 3 PersistentVolume), not namespaced
   template:
-    src: pv_yaml.j2
+    src: '001_pv_yaml.j2'
     dest: '{{ kube_payload_basedir }}/rook/pv.yaml'
     owner: '{{ kube_payload_owner }}'
     group: '{{ kube_payload_group }}'
@@ -25,7 +25,7 @@
 
 - name: Write namespace manifest
   template:
-    src: namespace_yaml.j2
+    src: '002_namespace_yaml.j2'
     dest: '{{ kube_payload_basedir }}/rook/namespace.yaml'
     owner: '{{ kube_payload_owner }}'
     group: '{{ kube_payload_group }}'
@@ -46,18 +46,13 @@
     - 'storageclass-bucket-retain.yaml' # only for comparison
     - 'nfs.yaml' # only for comparison
 
-- name: Write custom versions of cluster, filesystem, storageclass, nfs manifest
+- name: Write custom versions of cluster manifest
   template:
-    src: '{{ item }}_yaml.j2'
-    dest: '{{ kube_payload_basedir }}/rook/{{ item }}.yaml'
+    src: '003_cluster_custom_yaml.j2'
+    dest: '{{ kube_payload_basedir }}/rook/cluster_custom.yaml'
     owner: '{{ kube_payload_owner }}'
     group: '{{ kube_payload_group }}'
     mode: 0644
-  with_items:
-    - 'cluster_custom'
-    - 'filesystem_custom'
-    - 'storageclass_custom'
-    - 'nfs_custom'
 
 - name: Apply pv manifest (not namespaced), creates StorageClass and PersistenVolume on each node
   include_role:
@@ -126,55 +121,3 @@
   run_once: true
   changed_when: false
 
-- name: Apply rook filesystem manifest
-  include_role:
-    name: kube-kubectl-apply
-  vars:
-    kube_kubectl_apply_dir: '{{ kube_payload_basedir }}/rook'
-    kube_kubectl_apply_yaml: filesystem_custom.yaml
-
-- name: Wait for 2 metadata server (mds) pods to be created
-  shell: "/usr/local/bin/kubectl get pod --namespace=rook-ceph --selector='app=rook-ceph-mds' --output=jsonpath='{range .items[*]}{.metadata.labels.app}{\"\\n\"}{end}' | wc -l | grep 2"
-  register: rook_controller_pods_created
-  failed_when: rook_controller_pods_created.rc == 2
-  until: rook_controller_pods_created.rc == 0
-  run_once: true
-  retries: 10
-  delay: 30
-  changed_when: false
-
-- name: Wait for all mds pods to become ready
-  shell: "/usr/local/bin/kubectl wait --namespace=rook-ceph --for=condition=Ready pods --selector='app=rook-ceph-mds' --timeout=600s"
-  register: rook_controller_pods_ready
-  run_once: true
-  changed_when: false
-
-- name: Apply rook storage class manifest for StorageClass rook-cephfs (not namespaced)
-  include_role:
-    name: kube-kubectl-apply
-  vars:
-    kube_kubectl_apply_dir: '{{ kube_payload_basedir }}/rook'
-    kube_kubectl_apply_yaml: storageclass_custom.yaml
-
-- name: Deploy NFS server
-  include_role:
-    name: kube-kubectl-apply
-  vars:
-    kube_kubectl_apply_dir: '{{ kube_payload_basedir }}/rook'
-    kube_kubectl_apply_yaml: nfs_custom.yaml
-
-- name: Wait for 2 nfs pods to be created
-  shell: "/usr/local/bin/kubectl get pod --namespace=rook-ceph --selector='app=rook-ceph-nfs' --output=jsonpath='{range .items[*]}{.metadata.labels.app}{\"\\n\"}{end}' | wc -l | grep 2"
-  register: rook_controller_pods_created
-  failed_when: rook_controller_pods_created.rc == 2
-  until: rook_controller_pods_created.rc == 0
-  run_once: true
-  retries: 10
-  delay: 30
-  changed_when: false
-
-- name: Wait for all nfs pods to become ready
-  shell: "/usr/local/bin/kubectl wait --namespace=rook-ceph --for=condition=Ready pods --selector='app=rook-ceph-nfs' --timeout=600s"
-  register: rook_controller_pods_ready
-  run_once: true
-  changed_when: false
