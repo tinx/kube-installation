@@ -13,10 +13,14 @@ Rubix is currently a raspberry pi, the three master/worker nodes are regular ser
 
 * clone this repo
 * create an ssh keypair (or several)
-* adjust group\_vars/all.yml:
+* adjust `group_vars/all.yml`:
   * list of accounts to create (vault string\_encrypted)
   * comment per account (vault string\_encrypted)
   * ssh public key per account (vault string\_encrypted)
+* provide your own version of `group_vars/kube_sensitive_info.yml` from 
+  the [template](group_vars/kube_sensitive_info.template.yml)
+  * ssh host keys (vault string\_encrypted). This is so a re-installation will not cause ssh to cry havoc all the time.
+  * the passphrase used to mount the encrypted storage (vault string\_encrypted)
 * start a shell with an ssh-agent available
 * add at least one of your keys to the agent
 
