@@ -16,6 +16,7 @@
     - /opt/dnsmasq/tftp
     - /opt/dnsmasq/conf.d
     - /opt/dnsmasq/local_hosts
+
 - name: Create the OTHER config directory
   file:
     name: '{{ item }}'
@@ -25,15 +26,17 @@
   with_items:
     - /opt/dnsmasq/tftp/pxeboot
     - /opt/dnsmasq/var
+
 - name: Create per ip pxeboot source directories for any host ip with pinned ssh host keys
   file:
     name: '/opt/dnsmasq/tftp/{{ item.key }}'
     owner: dnsmasq
     group: root
     state: directory
-  with_dict: '{{ kube_boot_server_ssh_host_keys }}'
+  loop: "{{ kube_boot_server_ssh_host_keys|dict2items }}"
   loop_control:
     label: "{{ item.key }}"
+
 - name: Adjust dnsmasq defaults
   template:
     src: rubix-dnsmasq.j2
@@ -42,6 +45,7 @@
     group: root
     mode: 0644
   notify: restart dnsmasq
+
 - name: Write dnsmasq.conf
   template:
     src: rubix-dnsmasq.conf.j2
@@ -50,6 +54,7 @@
     group: root
     mode: 0644
   notify: restart dnsmasq
+
 - name: Write hosts file
   template:
     src: rubix-dnsmasq-hosts.j2
@@ -58,6 +63,7 @@
     group: root
     mode: 0644
   notify: restart dnsmasq
+
 - name: Write dhcp_hosts file
   template:
     src: rubix-dnsmasq-dhcp-hosts.j2
@@ -66,6 +72,7 @@
     group: root
     mode: 0644
   notify: restart dnsmasq
+
 - name: Write resolv.conf file
   template:
     src: rubix-dnsmasq-resolv.conf.j2
@@ -74,28 +81,6 @@
     group: root
     mode: 0644
   notify: restart dnsmasq
-
-- name: Write grub.conf file
-  template:
-    src: rubix-dnsmasq-grub.conf.j2
-    dest: /opt/dnsmasq/tftp/grub.cfg
-    owner: dnsmasq
-    group: root
-    mode: 0644
-  vars:
-    kickstart_file: 'generic.ks'
-- name: Write specific grub.conf file for any host ip with pinned ssh host keys
-  template:
-    src: rubix-dnsmasq-grub.conf.j2
-    dest: "/opt/dnsmasq/tftp/{{ item.key }}/grub.cfg"
-    owner: dnsmasq
-    group: root
-    mode: 0644
-  vars:
-    kickstart_file: 'kickstart-{{ item.key }}.ks'
-  with_dict: '{{ kube_boot_server_ssh_host_keys }}'
-  loop_control:
-    label: "{{ item.key }}"
 
 - name: enable and start dnsmasq
   service:

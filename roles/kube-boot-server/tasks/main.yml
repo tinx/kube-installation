@@ -3,13 +3,24 @@
   include_tasks: tasks-dnsmasq.yml
   tags:
     - kube_boot_server_dnsmasq
+- name: Include dnsmasq tasks for Centos target
+  include_tasks: tasks-dnsmasq-centos.yml
+  tags:
+    - kube_boot_server_dnsmasq
+  when: kube_boot_server_target_platform == "CentOS"
 
 - name: Include CentOS PXE download tasks
   include_tasks: tasks-download-centos-pxe.yml
   tags:
     - kube_boot_server_download_centos_pxe
+  when: kube_boot_server_target_platform == "CentOS"
 
 - name: Include Apache tasks
   include_tasks: tasks-apache.yml
   tags:
     - kube_boot_server_apache
+- name: Include Apache tasks for Centos target
+  include_tasks: tasks-apache-centos.yml
+  tags:
+    - kube_boot_server_apache
+  when: kube_boot_server_target_platform == "CentOS"

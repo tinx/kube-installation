@@ -57,6 +57,8 @@
       include_role:
         name: kube-boot-server
       vars:
+        kube_boot_server_target_platform: 'CentOS'
+        kube_boot_server_pxe_bootfile: '{{ kube_centos_boot_file }}'
         kube_boot_server_ssh_keys: '{{ kube_users|map(attribute="ssh_key")|list }}'
         kube_boot_server_centos_version: '{{ kube_centos_version }}'
         kube_boot_centos_iso_download_url_path: '{{ kube_centos_iso_download_url_path }}'
@@ -64,6 +66,7 @@
         kube_boot_centos_iso_checksum: '{{ kube_centos_iso_checksum }}'
         kube_boot_server_pxe_files: "{{ kube_centos_pxe_files }}"
         kube_boot_server_ssh_host_keys: "{{ kube_ssh_host_keys }}"
+      when: kube_target_platform == "CentOS"
 
 - name: Configure NTP client
   hosts: kube_install_hosts
@@ -92,6 +95,7 @@
         kube_prepare_kubespray_repodir: '/home/ansible/kubespray'
         kube_prepare_kubespray_giturl: 'https://github.com/kubernetes-sigs/kubespray'
         kube_prepare_kubespray_version: '{{ kube_kubespray_version }}'
+      when: kube_target_platform == "CentOS"
 
 - name: Install Hashicorp Vault
   hosts: kube_install_hosts

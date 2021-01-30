@@ -17,7 +17,7 @@ bind-interfaces
 dhcp-range={{ kube_networks.internal.dhcp_min }},static,{{ kube_networks.internal.netmask }}
 dhcp-hostsfile=/opt/dnsmasq/etc/dhcp-hosts
 dhcp-option=option:domain-name,{{ kube_networks.internal.domain }}
-dhcp-option=option:bootfile-name,BOOTX64.EFI
+dhcp-option=option:bootfile-name,{{ kube_boot_server_pxe_bootfile }}
 dhcp-leasefile=/opt/dnsmasq/var/dhcp_leases
 
 #

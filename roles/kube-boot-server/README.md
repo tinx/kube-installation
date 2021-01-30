@@ -39,7 +39,7 @@ Note: also see the Requirements section.
 Example Playbook
 ----------------
 
-    - name: Configure PXE boot services
+    - name: Configure PXE boot services for CentOS 7
       hosts: kube_install_hosts
       become: true
       tasks:
@@ -47,6 +47,8 @@ Example Playbook
           include_role:
             name: kube-boot-server
           vars:
+            kube_boot_server_target_platform: 'CentOS'
+            kube_boot_server_pxe_bootfile: 'BOOTX64.EFI'
             kube_boot_server_ssh_keys:
                 - ssh_key_1
                 - ssh_key_2

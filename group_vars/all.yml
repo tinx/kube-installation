@@ -14,6 +14,8 @@ kube_networks:
     broadcast: 192.168.0.255
     nameserver: 192.168.0.8
 
+kube_target_platform: 'CentOS'
+
 kube_centos_version: 7.9.2009
 kube_centos_iso_download_url_path: 'http://mirror.eu.oneandone.net/linux/distributions/centos/7/isos/x86_64/'
 kube_centos_iso_filename: 'CentOS-7-x86_64-Minimal-2009.iso'
@@ -34,6 +36,7 @@ kube_centos_pxe_files:
   - url: 'http://mirror.centos.org/centos/{{ kube_centos_version }}/os/x86_64/images/pxeboot/vmlinuz'
     filename: pxeboot/vmlinuz
     checksum: 'sha256:ab8ea479170dc4b74d20074e399701ca87e3a8057224f5ab30794de23ee72e90'
+kube_centos_boot_file: 'BOOTX64.EFI'
 
 kube_ntp_servers:
   - pool.ntp.org

@@ -1,0 +1,113 @@
+---
+- name: Create content directories
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - /var/www/html/pxe
+    - /var/www/html/pxe/centos
+    - /var/www/html/kickstart
+    - /var/www/html/centos
+    - /var/www/html/centos/7
+    - /var/www/html/centos/7/isos
+    - /var/www/html/centos/7/isos/x86_64
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates/x86_64'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/os'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/os/x86_64'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/extras'
+    - '/var/www/html/centos/{{ kube_boot_server_centos_version }}/extras/x86_64'
+
+- name: Render kickstart config file
+  template:
+    src: rubix-kickstart.j2
+    dest: /var/www/html/kickstart/generic.ks
+    owner: root
+    group: root
+    mode: 0444
+  vars:
+    priv_keys: {}
+    pub_keys: {}
+- name: Render specific kickstart config file for any host ip with pinned ssh host keys
+  template:
+    src: rubix-kickstart.j2
+    dest: "/var/www/html/kickstart/kickstart-{{ item.key }}.ks"
+    owner: root
+    group: root
+    mode: 0444
+  vars:
+    priv_keys: "{{ item.value['ssh_private_keys'] }}"
+    pub_keys: "{{ item.value['ssh_public_keys'] }}"
+  with_dict: '{{ kube_boot_server_ssh_host_keys }}'
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Download CentOS ISO
+  get_url:
+    url: '{{ kube_boot_centos_iso_download_url_path }}{{ kube_boot_centos_iso_filename }}'
+    dest: '/var/www/html/centos/7/isos/x86_64/{{ kube_boot_centos_iso_filename }}'
+    checksum: '{{ kube_boot_centos_iso_checksum }}'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Mount CentOS ISO
+  mount:
+    path: /var/www/html/pxe/centos
+    src: '/var/www/html/centos/7/isos/x86_64/{{ kube_boot_centos_iso_filename }}'
+    opts: ro,loop
+    fstype: auto
+    state: mounted
+
+- name: Check If Remount Necessary
+  # grep has rc 0 if a match was found, 1 if not
+  shell: 'mount | grep "/var/www/html/centos/7/isos/x86_64/{{ kube_boot_centos_iso_filename }} on /var/www/html/pxe/centos"'
+  args:
+    warn: no
+  ignore_errors: yes
+  register: isoIsMountedCorrectly
+  failed_when: false
+  changed_when: false
+
+- name: Trigger Remount Handler
+  command: /bin/true
+  when: isoIsMountedCorrectly.rc != 0
+  notify: remount centos iso
+
+- name: Mirror CentOS os Repo
+  include_role:
+    name: kube-repo-mirror
+  vars:
+    kube_repo_mirror_jobname: centos7-os
+    kube_repo_mirror_source: 'rsync://mirror.eu.oneandone.net/centos/{{ kube_boot_server_centos_version }}/os/x86_64/'
+    kube_repo_mirror_target: '/var/www/html/centos/{{ kube_boot_server_centos_version }}/os/x86_64/'
+    kube_repo_mirror_excludes:
+      - 'drpms/'
+      - 'EFI/'
+      - 'LiveOS/'
+      - 'images/'
+      - 'isolinux/'
+
+- name: Mirror CentOS updates Repo
+  include_role:
+    name: kube-repo-mirror
+  vars:
+    kube_repo_mirror_jobname: centos7-updates
+    kube_repo_mirror_source: 'rsync://mirror.eu.oneandone.net/centos/{{ kube_boot_server_centos_version }}/updates/x86_64/'
+    kube_repo_mirror_target: '/var/www/html/centos/{{ kube_boot_server_centos_version }}/updates/x86_64/'
+    kube_repo_mirror_excludes:
+      - 'drpms/'
+
+- name: Mirror CentOS extras Repo
+  include_role:
+    name: kube-repo-mirror
+  vars:
+    kube_repo_mirror_jobname: centos7-extras
+    kube_repo_mirror_source: 'rsync://mirror.eu.oneandone.net/centos/{{ kube_boot_server_centos_version }}/extras/x86_64/'
+    kube_repo_mirror_target: '/var/www/html/centos/{{ kube_boot_server_centos_version }}/extras/x86_64/'
+    kube_repo_mirror_excludes:
+      - 'drpms/'
