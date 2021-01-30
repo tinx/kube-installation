@@ -1,3 +1,12 @@
+# tinx/kube-installation: Kubernetes For Our Home
+
+This repository contains ansible code that we use to install and maintain our small home 
+[Kubernetes](https://kubernetes.io/) cluster:
+
+![alt text](schematic.png)
+
+Rubix is currently a raspberry pi, the three master/worker nodes are regular servers.
+
 # Kubernetes Cluster Setup
 
 ## Preparations
